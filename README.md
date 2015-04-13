@@ -6,7 +6,7 @@ Project for the Advanced Interaction Design (MAMN01) at LTH
 This week we started by presenting the idea for our application for the rest of the group.
 We also finished our low fi prototype. 
 
-![alt tag](http://i61.tinypic.com/20h9fh3.jpg)
+![alt tag](https://raw.github.com/dabbe/mamn01-project/master/images/lowfi.jpg)
 
 We decided on using 5 screens for the application. The inital screen which only has a start button. We also discussed having a level picker at this screen, but this wont be implemented unless we feel we have time left in the end of the project. The second screen consist of the search-for-the-treasure-part of the game, which we decided will be a compass. The screen will also show the over all progress, in a bar. This is where the player collects their total points. 
 

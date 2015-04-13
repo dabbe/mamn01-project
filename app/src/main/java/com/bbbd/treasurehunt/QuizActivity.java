@@ -1,7 +1,6 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -19,8 +18,8 @@ public class QuizActivity extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        Toast.makeText(this, "trololol", Toast.LENGTH_SHORT).show();
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            Toast.makeText(this, "trololol", Toast.LENGTH_SHORT).show();
         return true;
     }
 }

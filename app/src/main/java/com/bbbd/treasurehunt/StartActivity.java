@@ -18,7 +18,8 @@ public class StartActivity extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        startActivity(new Intent(this, CompassActivity.class));
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            startActivity(new Intent(this, CompassActivity.class));
         return true;
     }
 }

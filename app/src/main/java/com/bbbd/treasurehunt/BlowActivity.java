@@ -18,7 +18,8 @@ public class BlowActivity extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        startActivity(new Intent(this, QuizActivity.class));
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            startActivity(new Intent(this, QuizActivity.class));
         return true;
     }
 }

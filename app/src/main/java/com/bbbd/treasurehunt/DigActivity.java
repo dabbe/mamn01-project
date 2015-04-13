@@ -19,7 +19,8 @@ public class DigActivity extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        startActivity(new Intent(this, BlowActivity.class));
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            startActivity(new Intent(this, BlowActivity.class));
         return true;
     }
 }

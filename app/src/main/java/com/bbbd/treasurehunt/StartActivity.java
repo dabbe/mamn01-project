@@ -3,10 +3,11 @@ package com.bbbd.treasurehunt;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.view.View;
 
 /**
  * Created by dabbe on 13 Apr.
+ * mod 14 apr by christian
  */
 public class StartActivity extends Activity {
 
@@ -16,10 +17,7 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+    public void startHunting(View view) {
             startActivity(new Intent(this, CompassActivity.class));
-        return true;
     }
 }

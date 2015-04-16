@@ -1,10 +1,22 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:weightSum="2"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:orientation="vertical">
 
+    <RelativeLayout
+        android:weightSum="2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/top_square"
+        android:layout_weight="0.8">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,43 +38,58 @@
         android:layout_below="@+id/header"
         android:layout_centerHorizontal="true"
         android:textSize="20dp" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.2"
+        android:id="@+id/bottom_square"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
 
+            android:background="#ffffff">
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_width="match_parent">
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:text="6"
-        android:id="@+id/b_ans1"
-        android:layout_marginBottom="55dp"
-        android:layout_above="@+id/b_ans3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/b_ans1" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:text="5"
-        android:id="@+id/b_ans2"
-        android:layout_alignTop="@+id/b_ans1"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/b_ans2" />
+        </TableRow>
 
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:layout_width="match_parent">
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
         android:text="7"
-        android:id="@+id/b_ans3"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/b_ans3" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
         android:text="8"
-        android:id="@+id/b_ans4"
-        android:layout_below="@+id/b_ans1"
-        android:layout_alignLeft="@+id/b_ans2"
-        android:layout_alignStart="@+id/b_ans2" />
-
-</RelativeLayout>
+        android:id="@+id/b_ans4" />
+        </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</LinearLayout>

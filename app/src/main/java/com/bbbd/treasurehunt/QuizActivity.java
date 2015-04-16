@@ -136,15 +136,11 @@ public class QuizActivity extends Activity {
         int answer2 = rn.nextInt(10) + 1;
         question.setText(answer1 + " + " + answer2 + " = ");
         correct = answer1 + answer2;
-        Log.d("Quiz","Size vector:" + buttons.size());
-        Log.d("Quiz", buttons.get(0).getText().toString());
 
-        int i = 0;
-        while(i < 4){
+        for(int i = 0; i < 4; i++){
             int nbr = rn.nextInt(correct*2);
             if(nbr != correct){
                 buttons.get(i).setText(Integer.toString(nbr));
-                i++;
             }
         }
         buttons.get(rn.nextInt(4)).setText(Integer.toString(correct));

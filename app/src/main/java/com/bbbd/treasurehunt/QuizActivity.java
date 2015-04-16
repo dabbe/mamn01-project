@@ -2,16 +2,21 @@ package com.bbbd.treasurehunt;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -39,10 +44,10 @@ public class QuizActivity extends Activity {
         button3 = (Button) findViewById(R.id.b_ans3);
         button4 = (Button) findViewById(R.id.b_ans4);
 
-        //Assign texview with the question
+        //Assign textView with the question
         question = (TextView) findViewById(R.id.question);
 
-        //Add all buttons to arraylist
+        //Add all buttons to Arraylist
         buttons = new ArrayList<Button>();
         buttons.add(button1);
         buttons.add(button2);
@@ -50,34 +55,18 @@ public class QuizActivity extends Activity {
         buttons.add(button4);
 
 
-        makeMathQuestion();
-/*
-        button1.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    changeBackColorButton(0);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if (button1.getText().equals(Integer.toString(correct))) {
-                        Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                return false;
-            }
-        });
-**/
+        createJsonQuestion();
+        //makeMathQuestion();
 
         button1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                 if (button1.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
-                    correctAwnsers();
+                    correctAnswers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    makeMathQuestion();
+                createJsonQuestion();
             }
         });
 
@@ -85,10 +74,10 @@ public class QuizActivity extends Activity {
             public void onClick(View v) {
                 if (button2.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
-                    correctAwnsers();
+                    correctAnswers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    makeMathQuestion();
+                    createJsonQuestion();
             }
         });
 
@@ -97,10 +86,10 @@ public class QuizActivity extends Activity {
             public void onClick(View v) {
                 if (button3.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
-                    correctAwnsers();
+                    correctAnswers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    makeMathQuestion();
+                    createJsonQuestion();
             }
         });
 
@@ -108,12 +97,58 @@ public class QuizActivity extends Activity {
             public void onClick(View v) {
                 if (button4.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
-                    correctAwnsers();
+                    correctAnswers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    makeMathQuestion();
+                    createJsonQuestion();
             }
         });
+    }
+
+    private void createJsonQuestion() {
+        String s = loadJSONFromAsset();
+        try {
+            //Take out information of the random JSon Object with given name
+            JSONObject obj = new JSONObject(s);
+            JSONArray jArry = obj.getJSONArray("math1");
+            Random rand = new Random();
+            JSONObject firstObj = jArry.getJSONObject(rand.nextInt(jArry.length()));
+            question.setText(firstObj.getString("question"));
+
+            //Take out the answers and shuffle
+            String [] answers = new String[4];
+            answers[0] = firstObj.getString("false1");
+            answers[1] = firstObj.getString("false2");
+            answers[2] = firstObj.getString("false3");
+            answers[3] = firstObj.getString("correct");
+            correct = Integer.valueOf(answers[3]);
+            Collections.shuffle(Arrays.asList(answers));
+
+            //Assign the answers
+            button1.setText(answers[0]);
+            button2.setText(answers[1]);
+            button3.setText(answers[2]);
+            button4.setText(answers[3]);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getResources().openRawResource(R.raw.document);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 
     @Override
@@ -121,26 +156,15 @@ public class QuizActivity extends Activity {
         //Nothing will happen when you push back_buttom
     }
 
-    private void correctAwnsers() {
+
+    private void correctAnswers() {
         startActivity(new Intent(this, CompassActivity.class));
         finish();
+        //Will be changed later on
     }
 
-    /*
-    private void changeBackColorButton(int i) {
-        for (int j = 0; j < buttons.size(); j++ ){
-            if(i == j) {
-                buttons.get(j).setBackgroundColor(Color.BLUE);
-            } else {
-                buttons.get(j).setBackgroundColor(Color.LTGRAY);
-            }
-        }
-
-    }
-    **/
-
+    //Not in use, but nice to have
     private void makeMathQuestion(){
-
         Random rn = new Random();
         int answer1 = rn.nextInt(10) + 1;
         int answer2 = rn.nextInt(10) + 1;

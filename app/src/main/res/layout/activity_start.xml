@@ -14,7 +14,7 @@
         android:gravity="center"/>
 
     <TextView
-        android:text="  Välkommen \n till Skattjakten"
+        android:text="   Välkommen \ntill Skattjakten"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
@@ -23,6 +23,8 @@
         android:textSize="40dp"
         android:textAlignment="center"
         android:textColor="#000"
+        android:background="#80E8CB56"
+
         android:layout_height="wrap_content"/>
 
     <Button

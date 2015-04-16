@@ -77,6 +77,7 @@ public class QuizActivity extends Activity {
                     correctAwnsers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
+                    makeMathQuestion();
             }
         });
 
@@ -87,6 +88,7 @@ public class QuizActivity extends Activity {
                     correctAwnsers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
+                    makeMathQuestion();
             }
         });
 
@@ -98,6 +100,7 @@ public class QuizActivity extends Activity {
                     correctAwnsers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
+                    makeMathQuestion();
             }
         });
 
@@ -108,12 +111,19 @@ public class QuizActivity extends Activity {
                     correctAwnsers();
                 } else
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
+                    makeMathQuestion();
             }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        //Nothing will happen when you push back_buttom
+    }
+
     private void correctAwnsers() {
         startActivity(new Intent(this, CompassActivity.class));
+        finish();
     }
 
     /*

@@ -1,5 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -7,10 +6,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:weightSum="2"
-    android:background="@drawable/sand_bg"
+    android:background="@drawable/t_map"
     android:tileMode="repeat"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -20,37 +19,39 @@
         android:orientation="vertical"
         android:id="@+id/top_square"
         android:layout_weight="0.8">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Lös Problemet för att låsa upp skatten "
-        android:id="@+id/header"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginTop="20dp"
-        android:text="Vad är svaret på följande fråga?"
-        android:id="@+id/what_is"
-        android:layout_centerHorizontal="true"
-        android:gravity="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Lös Problemet för att låsa upp skatten "
+            android:id="@+id/header"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="3 + 5 ="
-        android:id="@+id/question"
-        android:layout_marginTop="53dp"
-        android:layout_below="@+id/what_is"
-        android:layout_centerHorizontal="true"
-        android:textSize="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_marginTop="20dp"
+            android:text="Vad är svaret på följande fråga?"
+            android:id="@+id/what_is"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="3 + 5 ="
+            android:id="@+id/question"
+            android:layout_marginTop="53dp"
+            android:layout_below="@+id/what_is"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -58,51 +59,54 @@
         android:id="@+id/bottom_square"
         android:layout_gravity="bottom"
         android:orientation="vertical">
+
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:shrinkColumns="*"
             android:stretchColumns="*">
+
             <TableRow
                 android:id="@+id/tableRow1"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:layout_width="match_parent">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="6"
-        android:id="@+id/b_ans1" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="6"
+                    android:id="@+id/b_ans1" />
 
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="5"
+                    android:id="@+id/b_ans2" />
+            </TableRow>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:text="5"
-        android:id="@+id/b_ans2" />
-        </TableRow>
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_width="match_parent">
 
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:layout_width="match_parent">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:text="7"
-        android:id="@+id/b_ans3" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:text="7"
+                    android:id="@+id/b_ans3" />
 
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:text="8"
-        android:id="@+id/b_ans4" />
-        </TableRow>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:text="8"
+                    android:id="@+id/b_ans4" />
+            </TableRow>
         </TableLayout>
     </LinearLayout>
 </LinearLayout>

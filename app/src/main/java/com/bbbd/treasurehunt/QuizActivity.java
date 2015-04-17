@@ -1,8 +1,10 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,18 +57,19 @@ public class QuizActivity extends Activity {
         buttons.add(button4);
 
 
-
         createJsonQuestion();
         //makeMathQuestion();
 
-        button1.setOnClickListener(new View.OnClickListener(){
+        button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (button1.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
-                } else
+                } else {
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                createJsonQuestion();
+                    createJsonQuestion();
+                    wrongVibrate();
+                }
             }
         });
 
@@ -75,9 +78,11 @@ public class QuizActivity extends Activity {
                 if (button2.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
-                } else
+                } else{
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     createJsonQuestion();
+                    wrongVibrate();
+                }
             }
         });
 
@@ -87,9 +92,11 @@ public class QuizActivity extends Activity {
                 if (button3.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
-                } else
+                } else {
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     createJsonQuestion();
+                    wrongVibrate();
+                }
             }
         });
 
@@ -98,9 +105,11 @@ public class QuizActivity extends Activity {
                 if (button4.getText().equals(Integer.toString(correct))) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
-                } else
+                } else {
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     createJsonQuestion();
+                    wrongVibrate();
+                }
             }
         });
     }
@@ -116,7 +125,7 @@ public class QuizActivity extends Activity {
             question.setText(firstObj.getString("question"));
 
             //Take out the answers and shuffle
-            String [] answers = new String[4];
+            String[] answers = new String[4];
             answers[0] = firstObj.getString("false1");
             answers[1] = firstObj.getString("false2");
             answers[2] = firstObj.getString("false3");
@@ -156,8 +165,19 @@ public class QuizActivity extends Activity {
         //Nothing will happen when you push back_buttom
     }
 
+    private void correctVibrate() {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0, 200, 200, 500};
+        v.vibrate(pattern, -1);
+    }
+
+    private void wrongVibrate(){
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(1000);
+    }
 
     private void correctAnswers() {
+        correctVibrate();
         startActivity(new Intent(this, CompassActivity.class));
         finish();
         //Will be changed later on

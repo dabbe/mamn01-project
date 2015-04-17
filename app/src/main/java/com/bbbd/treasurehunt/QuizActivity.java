@@ -3,6 +3,7 @@ package com.bbbd.treasurehunt;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -34,6 +35,8 @@ public class QuizActivity extends Activity {
 
     private ArrayList<Button> buttons;
     private int correct;
+
+    MediaPlayer mp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +70,7 @@ public class QuizActivity extends Activity {
                     correctAnswers();
                 } else {
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    createJsonQuestion();
-                    wrongVibrate();
+                    wrongAnswers();
                 }
             }
         });
@@ -80,8 +82,7 @@ public class QuizActivity extends Activity {
                     correctAnswers();
                 } else{
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    createJsonQuestion();
-                    wrongVibrate();
+                    wrongAnswers();
                 }
             }
         });
@@ -94,8 +95,7 @@ public class QuizActivity extends Activity {
                     correctAnswers();
                 } else {
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    createJsonQuestion();
-                    wrongVibrate();
+                    wrongAnswers();
                 }
             }
         });
@@ -107,8 +107,7 @@ public class QuizActivity extends Activity {
                     correctAnswers();
                 } else {
                     Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
-                    createJsonQuestion();
-                    wrongVibrate();
+                    wrongAnswers();
                 }
             }
         });
@@ -167,17 +166,52 @@ public class QuizActivity extends Activity {
 
     private void correctVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        long[] pattern = {0, 200, 200, 500};
+        long[] pattern = {0, 250, 400, 1050};
         v.vibrate(pattern, -1);
     }
 
     private void wrongVibrate(){
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(1000);
+        long[] pattern = {0, 100, 100, 100, 100, 100, 100, 100, 100, 500};
+        v.vibrate(pattern, -1);
+
+    }
+
+    private void correctSound(){
+        mp = MediaPlayer.create(this, R.raw.correctsound);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+
+        });
+        mp.start();
+    }
+
+    private void wrongSound(){
+        mp = MediaPlayer.create(this, R.raw.wrongsound);
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+
+        });
+        mp.start();
+    }
+
+    private void wrongAnswers(){
+        createJsonQuestion();
+        wrongSound();
+        wrongVibrate();
     }
 
     private void correctAnswers() {
         correctVibrate();
+        correctSound();
         startActivity(new Intent(this, CompassActivity.class));
         finish();
         //Will be changed later on

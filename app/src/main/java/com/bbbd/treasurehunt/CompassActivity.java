@@ -62,8 +62,8 @@ public class CompassActivity extends Activity {
         }
 
         if (loc != null) {
-            wptLoc.setLatitude(55.722920f);
-            wptLoc.setLongitude(13.215821f);
+            wptLoc.setLatitude(55.557194f);
+            wptLoc.setLongitude(14.348759f);
             dist = loc.distanceTo(wptLoc);
             bearing = loc.bearingTo(wptLoc);    // -180 to 180
             heading = loc.getBearing();         // 0 to 360

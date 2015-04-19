@@ -138,6 +138,7 @@ public class CompassActivity extends Activity implements
                 break;
             default:
                 startActivity(new Intent(this, DigActivity.class));
+                return;
         }
         compassView.setTargetLocation(l);
     }

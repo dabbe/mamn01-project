@@ -1,4 +1,4 @@
-package com.bbbd.treasurehunt.compass;
+package com.bbbd.treasurehunt.location;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -80,7 +80,5 @@ public class Compass implements SensorEventListener {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 }

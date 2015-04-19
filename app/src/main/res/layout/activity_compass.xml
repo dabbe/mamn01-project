@@ -5,18 +5,48 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FF00FF"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <TextView
-        android:text="hello compass"
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout android:id="@+id/layout_compass_buttons"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_malmo"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="mmö" />
+
+        <Button
+            android:id="@+id/btn_simrishamn"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="simr" />
+
+        <Button
+            android:id="@+id/btn_sthlm"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="sthlm" />
+
+        <Button
+            android:id="@+id/btn_tbg"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="trell" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout"
-        android:layout_below="@id/tv"
+        android:layout_below="@id/layout_compass_buttons"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

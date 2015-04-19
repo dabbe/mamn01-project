@@ -1,4 +1,4 @@
-package com.bbbd.treasurehunt.compass;
+package com.bbbd.treasurehunt.location;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

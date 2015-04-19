@@ -11,78 +11,124 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
-import com.bbbd.treasurehunt.compass.Compass;
-import com.bbbd.treasurehunt.compass.CompassView;
+import com.bbbd.treasurehunt.location.Compass;
+import com.bbbd.treasurehunt.location.CompassView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 /**
  * Created by dabbe on 13 Apr.
  */
-public class CompassActivity extends Activity {
-    Compass compass;
+public class CompassActivity extends Activity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
+
+    private String TAG = "CompassActivity.java";
+    private Compass compass;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private Location lastLocation;
+    private CompassView compassView;
+
+    int tmpCounter = 0;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            switch (tmpCounter++) {
+                case 0: {
+                    Location l = new Location(""); //trelleborg
+                    l.setLatitude(55.376107);
+                    l.setLongitude(13.157209);
+                    compassView.setTargetLocation(l);
+                    break;
+                }
+                case 1: {
+                    Location l = new Location(""); //malmö
+                    l.setLatitude(55.602177);
+                    l.setLongitude(13.002601);
+                    compassView.setTargetLocation(l);
+                    break;
+                }
+                case 3:
+                    startActivity(new Intent(this, DigActivity.class));
+                    break;
+            }
+        }
+        return true;
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
         compass = new Compass(this);
-        ((LinearLayout) findViewById(R.id.layout)).addView(new CompassView(this, compass));
-        new Thread() {
-            @Override
-            public void run() {
-                while (true) {
-                    test();
-                    try {
-                        sleep(400);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.start();
+
+        Location target = new Location(""); //  simrishamn
+        target.setLatitude(55.557194f);
+        target.setLongitude(14.348759f);
+
+        compassView = new CompassView(this, compass, target);
+        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
-
-    void test() {
-        Location loc;   //Will hold lastknown location
-        Location wptLoc = new Location("");    // Waypoint location
-        float dist = -1;
-        float bearing = 0;
-        float heading = 0;
-        float arrow_rotation = 0;
-
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if (loc == null) {   //No recent GPS fix
-            Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(true);
-            criteria.setCostAllowed(true);
-            criteria.setSpeedRequired(false);
-            loc = lm.getLastKnownLocation(lm.getBestProvider(criteria, true));
-        }
-
-        if (loc != null) {
-            wptLoc.setLatitude(55.557194f);
-            wptLoc.setLongitude(14.348759f);
-            dist = loc.distanceTo(wptLoc);
-            bearing = loc.bearingTo(wptLoc);    // -180 to 180
-            heading = loc.getBearing();         // 0 to 360
-            // *** Code to calculate where the arrow should point ***
-            arrow_rotation = (360 + ((bearing + 360) % 360) - heading) % 360;
-
-            Log.d("CompassActivity", "Dist: " + dist);
-            Log.d("CompassActivity", "Bearing: " + bearing);
-            Log.d("CompassActivity", "Heading: " + heading);
-            Log.d("CompassActivity", "Arrow rotation: " + arrow_rotation);
-            Log.d("CompassActivity", "Should point at: " + (bearing - compass.getDegrees()));
-        }
-    }
-
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
-            startActivity(new Intent(this, DigActivity.class));
-        return true;
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "GoogleApiClient connection has been suspend");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG, "GoogleApiClient connection has failed");
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        lastLocation = location;
+    }
+
+    public Location getLastLocation() {
+        if (lastLocation != null) return lastLocation;
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(true);
+        criteria.setCostAllowed(true);
+        criteria.setSpeedRequired(false);
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        lastLocation = lm.getLastKnownLocation(lm.getBestProvider(criteria, true));
+        return lastLocation;
     }
 }

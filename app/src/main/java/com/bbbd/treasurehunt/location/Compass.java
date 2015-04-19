@@ -1,11 +1,10 @@
-package com.bbbd.treasurehunt.compass;
+package com.bbbd.treasurehunt.location;
 
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Location;
 
 /**
  * Created by Daniel on 2015-03-25.

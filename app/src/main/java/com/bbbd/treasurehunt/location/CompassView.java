@@ -1,13 +1,13 @@
 package com.bbbd.treasurehunt.location;
 
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.location.Location;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -36,7 +36,7 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
         init();
     }
 
-    public void setTargetLocation(Location location){
+    public void setTargetLocation(Location location) {
         this.target = location;
     }
 
@@ -44,6 +44,10 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
         holder = getHolder();
         holder.addCallback(this);
         setFocusable(true);
+
+        setBackgroundColor(Color.TRANSPARENT);
+        setZOrderOnTop(true);
+        holder.setFormat(PixelFormat.TRANSPARENT);
     }
 
     private void initGraphical() {
@@ -108,7 +112,6 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
     public void drawCompass(Canvas canvas) {
         float bearing = activity.getLastLocation().bearingTo(target);
         float deg = bearing - compass.getDegrees();
-
         canvas.save();
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         canvas.rotate(deg, width / 2f, height / 2f);

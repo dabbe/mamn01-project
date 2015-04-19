@@ -1,13 +1,16 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,8 @@ public class QuizActivity extends Activity {
     private int correct;
 
     MediaPlayer mp = null;
+
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +116,26 @@ public class QuizActivity extends Activity {
                 }
             }
         });
+
+        createDialog();
     }
+
+    private void createDialog() {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_quiz);
+        dialog.setCanceledOnTouchOutside(false);
+        //dialog.setTitle("Dialog Box");
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageView_dialog_quiz);
+        image.setImageResource(R.drawable.dialog2_bg);
+        image.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 
     private void createJsonQuestion() {
         String s = loadJSONFromAsset();

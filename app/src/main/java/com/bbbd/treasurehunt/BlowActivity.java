@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bbbd.treasurehunt.sound.*;
@@ -29,7 +30,8 @@ public class BlowActivity extends Activity{
     private TextView mStatusView;
     /* data source */
     private SoundMeter mSensor;
-    private double progress;
+    private float progress;
+    private ImageView sand;
 
     /****************** Define runnable thread again and again detect noise *********/
 
@@ -52,6 +54,7 @@ public class BlowActivity extends Activity{
             if(progress>50){
                 transitionToNextScene();
             }
+            sand.setAlpha(1-(progress/50));
         }
     };
 
@@ -65,6 +68,7 @@ public class BlowActivity extends Activity{
 
         mSensor = new SoundMeter();
         progress = 0;
+        sand = (ImageView) findViewById(R.id.sandImage);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "NoiseAlert");

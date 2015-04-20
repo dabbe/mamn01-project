@@ -113,11 +113,13 @@ public class CompassActivity extends Activity implements
         b.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+
+                //finish();
             }
         });
         b.setCancelable(false);
         b.show();
+
     }
 
     @Override

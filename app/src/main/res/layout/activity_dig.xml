@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Digg1"
-        android:id="@+id/checkbox"
+        android:id="@+id/Digg1"
         android:checked="false"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -55,7 +55,17 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Digg One Time:"
         android:id="@+id/textView"
-        android:layout_above="@+id/checkbox"
+        android:layout_above="@+id/Digg1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Digg2"
+        android:id="@+id/Digg2"
+        android:layout_below="@+id/Digg1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false" />
 </RelativeLayout>

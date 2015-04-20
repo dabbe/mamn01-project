@@ -1,13 +1,16 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +37,11 @@ public class QuizActivity extends Activity {
     private TextView question;
 
     private ArrayList<Button> buttons;
-    private int correct;
+    private String correct;
 
     MediaPlayer mp = null;
+
+    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,7 @@ public class QuizActivity extends Activity {
 
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (button1.getText().equals(Integer.toString(correct))) {
+                if (button1.getText().equals(correct)) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else {
@@ -77,7 +82,7 @@ public class QuizActivity extends Activity {
 
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (button2.getText().equals(Integer.toString(correct))) {
+                if (button2.getText().equals(correct)) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else{
@@ -90,7 +95,7 @@ public class QuizActivity extends Activity {
 
         button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (button3.getText().equals(Integer.toString(correct))) {
+                if (button3.getText().equals(correct)) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else {
@@ -102,7 +107,7 @@ public class QuizActivity extends Activity {
 
         button4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (button4.getText().equals(Integer.toString(correct))) {
+                if (button4.getText().equals(correct)) {
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else {
@@ -111,7 +116,26 @@ public class QuizActivity extends Activity {
                 }
             }
         });
+
+        createDialog();
     }
+
+    private void createDialog() {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_quiz);
+        dialog.setCanceledOnTouchOutside(false);
+        //dialog.setTitle("Dialog Box");
+        ImageView image = (ImageView) dialog.findViewById(R.id.imageView_dialog_quiz);
+        image.setImageResource(R.drawable.dialog2_bg);
+        image.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
 
     private void createJsonQuestion() {
         String s = loadJSONFromAsset();
@@ -129,7 +153,7 @@ public class QuizActivity extends Activity {
             answers[1] = firstObj.getString("false2");
             answers[2] = firstObj.getString("false3");
             answers[3] = firstObj.getString("correct");
-            correct = Integer.valueOf(answers[3]);
+            correct = answers[3];
             Collections.shuffle(Arrays.asList(answers));
 
             //Assign the answers
@@ -223,15 +247,15 @@ public class QuizActivity extends Activity {
         int answer1 = rn.nextInt(10) + 1;
         int answer2 = rn.nextInt(10) + 1;
         question.setText(answer1 + " + " + answer2 + " = ");
-        correct = answer1 + answer2;
+        int tempCorrect = answer1 + answer2;
 
         for(int i = 0; i < 4; i++){
-            int nbr = rn.nextInt(correct*2);
-            if(nbr != correct){
+            int nbr = rn.nextInt(tempCorrect*2);
+            if(nbr != tempCorrect){
                 buttons.get(i).setText(Integer.toString(nbr));
             }
         }
-        buttons.get(rn.nextInt(4)).setText(Integer.toString(correct));
-
+        buttons.get(rn.nextInt(4)).setText(Integer.toString(tempCorrect));
+        correct = String.valueOf(tempCorrect);
     }
 }

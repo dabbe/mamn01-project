@@ -65,7 +65,7 @@ public class BlowActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
         mStatusView = (TextView) findViewById(R.id.soundMeter);
-
+        mStatusView.setText("Blow away the sound!");
         mSensor = new SoundMeter();
         progress = 0;
         sand = (ImageView) findViewById(R.id.sandImage);

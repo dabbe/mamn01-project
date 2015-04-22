@@ -18,8 +18,8 @@ public class DigActivity extends Activity implements SensorEventListener{
 
     Float azimut, pitch, roll;  // View to draw a compass
     TextView x, y, z;
-    CheckBox cb;
-    boolean first;
+    CheckBox digg1, digg2;
+    boolean firstDigg, down, down2;
     int y_zero;
 
     private SensorManager mSensorManager;
@@ -33,8 +33,11 @@ public class DigActivity extends Activity implements SensorEventListener{
         x = (TextView) findViewById(R.id.x);
         y = (TextView) findViewById(R.id.y);
         z = (TextView) findViewById(R.id.z);
-        cb = (CheckBox) findViewById(R.id.checkbox);
-        first = true;
+        digg1 = (CheckBox) findViewById(R.id.Digg1);
+        digg2 = (CheckBox) findViewById(R.id.Digg2);
+        firstDigg = false;
+        down = false;
+        down2 = false;
 
         mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -81,16 +84,23 @@ public class DigActivity extends Activity implements SensorEventListener{
                 pitch = orientation[1];
                 roll = orientation[2];
                 y_axis = Math.toDegrees(pitch);
-/*                if(first){
-                    y_zero = (int) y_axis;
-                    first = false;
-                    Log.d("First ZeroY", Integer.toString(y_zero));
-                }*/
                 x.setText("X: " + Double.toString(Math.toDegrees(azimut)));
                 y.setText("Y: " + y_axis);
                 z.setText("Z: " + Double.toString(Math.toDegrees(roll)));
-                if(y_axis > 40 && y_axis < 50){
-                    cb.setChecked(true);
+                if(y_axis > 30 && y_axis < 50 && !firstDigg){
+                    down = true;
+                }
+                else if(y_axis < -30 && y_axis > -50 && down){
+                    digg1.setChecked(true);
+                    firstDigg = true;
+                }
+                if(firstDigg){
+                    if(y_axis > 30 && y_axis < 50){
+                        down2 = true;
+                    }
+                    else if(y_axis < -30 && y_axis > -50 && down2){
+                        digg2.setChecked(true);
+                    }
                 }
 
             }

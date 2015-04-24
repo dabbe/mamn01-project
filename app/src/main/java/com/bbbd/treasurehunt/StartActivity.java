@@ -19,6 +19,6 @@ public class StartActivity extends Activity {
 
     public void startHunting(View view) {
         startActivity(new Intent(this, CompassActivity.class));
-        finish();
+        //finish();
     }
 }

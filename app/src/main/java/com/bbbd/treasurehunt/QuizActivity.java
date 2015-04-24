@@ -42,6 +42,10 @@ public class QuizActivity extends Activity {
     private ArrayList<ImageView> chests;
     private int nbr_tries;
     final private int TRIES = 3;
+    final private String first_half = "Du har ";
+    final private String second_half = " försök kvar ";
+    final private String correctAnswerFirst = "Du får ";
+    final private String correctAnswerLast = " poäng!";
 
     MediaPlayer mp = null;
 
@@ -74,6 +78,10 @@ public class QuizActivity extends Activity {
         chests.add((ImageView) findViewById(R.id.chest_01));
         chests.add((ImageView) findViewById(R.id.chest_02));
         chests.add((ImageView) findViewById(R.id.chest_03));
+        ((ImageView) findViewById(R.id.chest_01)).setImageResource(R.drawable.little_chest_color);
+        ((ImageView) findViewById(R.id.chest_02)).setImageResource(R.drawable.little_chest_color);
+        ((ImageView) findViewById(R.id.chest_03)).setImageResource(R.drawable.little_chest_color);
+        ((TextView)  findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
 
         createJsonQuestion();
         //makeMathQuestion();
@@ -81,10 +89,8 @@ public class QuizActivity extends Activity {
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (button1.getText().equals(correct)) {
-                    Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else {
-                    Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     wrongAnswers();
                 }
             }
@@ -93,10 +99,8 @@ public class QuizActivity extends Activity {
         button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (button2.getText().equals(correct)) {
-                    Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else{
-                    Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     wrongAnswers();
                 }
             }
@@ -106,10 +110,8 @@ public class QuizActivity extends Activity {
         button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (button3.getText().equals(correct)) {
-                    Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else {
-                    Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     wrongAnswers();
                 }
             }
@@ -118,10 +120,8 @@ public class QuizActivity extends Activity {
         button4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (button4.getText().equals(correct)) {
-                    Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
                     correctAnswers();
                 } else {
-                    Toast.makeText(getApplicationContext(), "wrong", Toast.LENGTH_SHORT).show();
                     wrongAnswers();
                 }
             }
@@ -239,14 +239,17 @@ public class QuizActivity extends Activity {
 
     private void wrongAnswers(){
         if(nbr_tries > 1) {
+            Toast.makeText(getApplicationContext(), "Du har " + (nbr_tries-1) + " försök kvar!" , Toast.LENGTH_LONG).show();
             createJsonQuestion();
             nbr_tries--;
+            ((TextView)  findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
         } else {
+            Toast.makeText(getApplicationContext(), "Du klarade inte att öppna skatten, leta upp en ny!" , Toast.LENGTH_SHORT).show();
             nbr_tries--;
+            ((TextView)  findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
             startActivity(new Intent(this, CompassActivity.class));
-            //hello
             finish();
         }
         wrongSound();
@@ -254,11 +257,11 @@ public class QuizActivity extends Activity {
     }
 
     private void correctAnswers() {
+        Toast.makeText(getApplicationContext(),correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
         correctVibrate();
         correctSound();
         startActivity(new Intent(this, CompassActivity.class));
         finish();
-        //Will be changed later on
     }
 
     //Not in use, but nice to have

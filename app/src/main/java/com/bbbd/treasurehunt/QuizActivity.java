@@ -39,6 +39,10 @@ public class QuizActivity extends Activity {
     private ArrayList<Button> buttons;
     private String correct;
 
+    private ArrayList<ImageView> chests;
+    private int nbr_tries;
+    final private int TRIES = 3;
+
     MediaPlayer mp = null;
 
     final Context context = this;
@@ -64,6 +68,12 @@ public class QuizActivity extends Activity {
         buttons.add(button3);
         buttons.add(button4);
 
+        nbr_tries = TRIES;
+
+        chests = new ArrayList<ImageView>();
+        chests.add((ImageView) findViewById(R.id.chest_01));
+        chests.add((ImageView) findViewById(R.id.chest_02));
+        chests.add((ImageView) findViewById(R.id.chest_03));
 
         createJsonQuestion();
         //makeMathQuestion();
@@ -183,11 +193,11 @@ public class QuizActivity extends Activity {
         return json;
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         //Nothing will happen when you push back_buttom
     }
-
+ **/
     private void correctVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {0, 250, 400, 1050};
@@ -228,7 +238,16 @@ public class QuizActivity extends Activity {
     }
 
     private void wrongAnswers(){
-        createJsonQuestion();
+        if(nbr_tries > 1) {
+            createJsonQuestion();
+            nbr_tries--;
+            chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
+        } else {
+            nbr_tries--;
+            chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
+            startActivity(new Intent(this, CompassActivity.class));
+            finish();
+        }
         wrongSound();
         wrongVibrate();
     }

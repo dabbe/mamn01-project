@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:weightSum="2"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:weightSum="2.5"
     android:background="@drawable/sand_bg"
     android:tileMode="repeat"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -13,18 +13,76 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:id="@+id/top_layout">
+
+        <TableRow
+            android:id="@+id/tableRowTop"
+            android:weightSum="1"
+            android:background="#80E8CB56"
+            android:layout_height="fill_parent"
+            android:layout_width="match_parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Du har X försök kvar"
+            android:id="@+id/text_tries_left"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:id="@+id/chest_03"
+            android:background="@drawable/little_chest_color"
+            android:layout_marginLeft="10dp"
+            />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:id="@+id/chest_02"
+                android:background="@drawable/little_chest_color"
+                android:layout_marginLeft="10dp"
+                />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:id="@+id/chest_01"
+                android:background="@drawable/little_chest_color"
+                android:layout_marginLeft="10dp"
+                />
+
+        </TableRow>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:weightSum="2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/top_square"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.8">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Lös Problemet för att låsa upp skatten "
+            android:text="Lös Problemet för att låsa upp skatten, onödig??? "
             android:id="@+id/header"
             android:layout_centerHorizontal="true"
             android:gravity="center" />

@@ -246,6 +246,7 @@ public class QuizActivity extends Activity {
             nbr_tries--;
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
             startActivity(new Intent(this, CompassActivity.class));
+            //hello
             finish();
         }
         wrongSound();

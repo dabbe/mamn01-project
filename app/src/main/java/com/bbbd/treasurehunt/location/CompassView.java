@@ -7,7 +7,6 @@ import android.graphics.Path;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.location.Location;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -23,22 +22,17 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
     private DrawingThread thread;
     private Paint pathPaint, borderPaint;
 
-    private Location target;
     private CompassActivity activity;
     private Compass compass;
     private float width, height, arrowHeight, arrowWidth;
 
-    public CompassView(CompassActivity activity, Compass compass, Location target) {
+    public CompassView(CompassActivity activity, Compass compass) {
         super(activity);
         this.activity = activity;
         this.compass = compass;
-        this.target = target;
         init();
     }
 
-    public void setTargetLocation(Location location) {
-        this.target = location;
-    }
 
     private void init() {
         holder = getHolder();
@@ -110,13 +104,17 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void drawCompass(Canvas canvas) {
-        float bearing = activity.getLastLocation().bearingTo(target);
-        float deg = bearing - compass.getDegrees();
-        canvas.save();
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        canvas.rotate(deg, width / 2f, height / 2f);
-        canvas.drawPath(path, pathPaint);
-        canvas.drawPath(path, borderPaint);
-        canvas.restore();
+        Location location = activity.getLastLocation();
+        if (location != null) {
+            float deg = compass.getDegrees(location);
+            canvas.save();
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            canvas.rotate(deg, width / 2f, height / 2f);
+            canvas.drawPath(path, pathPaint);
+            canvas.drawPath(path, borderPaint);
+            canvas.restore();
+        } else {
+            canvas.drawText("No location found. :(",  (int)(width / 2f), (int)((height / 2f) - ((borderPaint.descent() + borderPaint.ascent()) / 2)), borderPaint);
+        }
     }
 }

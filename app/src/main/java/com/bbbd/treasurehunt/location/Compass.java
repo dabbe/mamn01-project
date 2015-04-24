@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 
 /**
  * Created by Daniel on 2015-03-25.
@@ -14,14 +15,20 @@ public class Compass implements SensorEventListener {
     private Sensor accelerometer, magnetometer;
     private float azimut;
     private float[] gravity, geomagnetic;
+    private Location target;
 
-    public Compass(Context c) {
+    public Compass(Context c, Location target) {
+        this.target = target;
         sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+    }
+
+
+    public void setTargetLocation(Location location) {
+        this.target = location;
     }
 
     public void stop() {
@@ -37,10 +44,11 @@ public class Compass implements SensorEventListener {
 
     /**
      * Taken from: http://blog.thomnichols.org/2011/08/smoothing-sensor-data-with-a-low-pass-filter
+     *
      * @see http://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
      * @see http://developer.android.com/reference/android/hardware/SensorEvent.html#values
      */
-    protected float[] lowPass(float[] input, float[] output) {
+    private float[] lowPass(float[] input, float[] output) {
         if (output == null) return input;
 
         for (int i = 0; i < input.length; i++) {
@@ -50,7 +58,7 @@ public class Compass implements SensorEventListener {
     }
 
     @Override
-    public synchronized void onSensorChanged(SensorEvent event) {
+    public void onSensorChanged(SensorEvent event) {
         switch (event.sensor.getType()) {
             case Sensor.TYPE_ACCELEROMETER:
                 gravity = lowPass(event.values.clone(), gravity);
@@ -74,11 +82,12 @@ public class Compass implements SensorEventListener {
 
     }
 
-    public synchronized float getDegrees() {
+    public float getDegrees(Location locationFrom) {
         float f = (float) Math.toDegrees(azimut);
-        return f < 0.0f ? f + 360.0f : f;
+        return locationFrom.bearingTo(target) - (f < 0.0f ? f + 360.0f : f);
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 }

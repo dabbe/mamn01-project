@@ -1,7 +1,9 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
@@ -44,13 +46,13 @@ public class CompassActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
         initButtons();
-        compass = new Compass(this);
 
         Location target = new Location("");
         target.setLatitude(lat[0]);
         target.setLongitude(lon[0]);
 
-        compassView = new CompassView(this, compass, target);
+        compass = new Compass(this, target);
+        compassView = new CompassView(this, compass);
         compassView.setOnClickListener(this);
         ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
 
@@ -86,6 +88,16 @@ public class CompassActivity extends Activity implements
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000);
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (lastLocation != null) {
+            System.out.println(lastLocation);
+            //mLatitudeText.setText(String.valueOf(lastLocation.getLatitude()));
+            //mLongitudeText.setText(String.valueOf(lastLocation.getLongitude()));
+        } else {
+            System.out.println("Location unavailable :(");
+        }
     }
 
     @Override
@@ -95,7 +107,19 @@ public class CompassActivity extends Activity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(TAG, "GoogleApiClient connection has failed");
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle("Error");
+        b.setMessage("The Google Api Client connection could not be established.");
+        b.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //finish();
+            }
+        });
+        b.setCancelable(false);
+        b.show();
+
     }
 
     @Override
@@ -140,7 +164,7 @@ public class CompassActivity extends Activity implements
                 startActivity(new Intent(this, DigActivity.class));
                 return;
         }
-        compassView.setTargetLocation(l);
+        compass.setTargetLocation(l);
     }
 
     //stänga av location osv

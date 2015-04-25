@@ -96,6 +96,7 @@ public class CompassActivity extends Activity implements
             //klar med spelet - dialog elr någonting?
             finish();
         } else {
+            //borde inte ta bort, borde loopa igenom alla o kolla om man har samlat ihop dom
             compass.setTargetLocation(treasures.remove(rnd.nextInt(treasures.size())).getLocation());
         }
     }

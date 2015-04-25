@@ -21,6 +21,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by dabbe on 13 Apr.
@@ -30,9 +39,9 @@ public class CompassActivity extends Activity implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, View.OnClickListener {
 
-    //malmö
-    private static final float lat = 55.602177f;
-    private static final float lon = 13.002601f;
+    //malmö,
+    private static final float lat = 55.598821f;
+    private static final float lon = 12.993877f;
 
     private String TAG = "CompassActivity.java";
     private Compass compass;
@@ -40,8 +49,10 @@ public class CompassActivity extends Activity implements
     private LocationRequest mLocationRequest;
     private Location lastLocation;
     private Location targetLocation;
-    private CompassView compassView;
     private VibrationThread t;
+
+    private ArrayList<Treasure> treasures;
+    private Random rnd;
 
     private long distanceFactor = 1000;
     private int distanceColor = 0xFFFF0000;
@@ -59,11 +70,14 @@ public class CompassActivity extends Activity implements
     }
 
     private void initialize() {
+        loadTreasures();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        rnd = new Random();
+        navigateToNextTreasure();
     }
 
     private void initializeGUI() {
@@ -71,9 +85,20 @@ public class CompassActivity extends Activity implements
         targetLocation.setLatitude(lat);
         targetLocation.setLongitude(lon);
         compass = new Compass(this, targetLocation);
-        compassView = new CompassView(this, compass);
+        CompassView compassView = new CompassView(this, compass);
         compassView.setOnClickListener(this);
         ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
+
+    }
+
+    private void navigateToNextTreasure() {
+        //update gui showing remaining treasures
+        if (treasures.size() == 0) {
+            //klar med spelet - dialog elr någonting?
+            finish();
+        } else {
+            compass.setTargetLocation(treasures.remove(rnd.nextInt(treasures.size())).getLocation());
+        }
     }
 
     @Override
@@ -94,14 +119,9 @@ public class CompassActivity extends Activity implements
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000);
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (lastLocation != null) {
-            System.out.println(lastLocation);
-            //mLatitudeText.setText(String.valueOf(lastLocation.getLatitude()));
-            //mLongitudeText.setText(String.valueOf(lastLocation.getLongitude()));
-        } else {
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (lastLocation == null) {
+            //Stänga av elr någonting? varning?
             System.out.println("Location unavailable :(");
         }
     }
@@ -202,6 +222,23 @@ public class CompassActivity extends Activity implements
         return distanceFactor;
     }
 
+    private void loadTreasures(){
+            String json = null;
+            try {
+                InputStream is = getResources().openRawResource(R.raw.treasures);
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+                json = new String(buffer, "UTF-8");
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Treasure>>(){}.getType();
+                treasures = gson.fromJson(json, type);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+    }
+
     private static class VibrationThread extends Thread {
 
         private Vibrator vibrator;
@@ -222,7 +259,6 @@ public class CompassActivity extends Activity implements
             while (!interrupted) {
                 long pause = activity.getDistanceFactor();
                 vibrator.vibrate(120);
-                //   Log.d("VibrationThread", "Pause: " + pause);
                 try {
                     sleep(pause + 120);
                 } catch (InterruptedException e) {

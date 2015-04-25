@@ -47,6 +47,7 @@ public class QuizActivity extends Activity {
     final private String correctAnswerFirst = "Du får ";
     final private String correctAnswerLast = " poäng!";
 
+
     MediaPlayer mp = null;
 
     final Context context = this;
@@ -126,7 +127,6 @@ public class QuizActivity extends Activity {
                 }
             }
         });
-
         createDialog();
     }
 
@@ -136,9 +136,9 @@ public class QuizActivity extends Activity {
         dialog.setContentView(R.layout.dialog_quiz);
         dialog.setCanceledOnTouchOutside(false);
         //dialog.setTitle("Dialog Box");
-        ImageView image = (ImageView) dialog.findViewById(R.id.imageView_dialog_quiz);
-        image.setImageResource(R.drawable.dialog2_bg);
-        image.setOnClickListener(new View.OnClickListener() {
+        TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
+        //image.setImageResource(R.drawable.dialog2_bg);
+       text.setOnClickListener(new View.OnClickListener() {
             public void onClick(View View3) {
                 dialog.dismiss();
             }

@@ -77,7 +77,6 @@ public class CompassActivity extends Activity implements
                 .addOnConnectionFailedListener(this)
                 .build();
         rnd = new Random();
-        navigateToNextTreasure();
     }
 
     private void initializeGUI() {
@@ -201,7 +200,7 @@ public class CompassActivity extends Activity implements
             t.setInterrupted(true);
         t = new VibrationThread(this);
         t.start();
-
+        navigateToNextTreasure();
     }
 
     /**

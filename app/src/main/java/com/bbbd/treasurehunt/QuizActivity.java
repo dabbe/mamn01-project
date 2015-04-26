@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -82,7 +83,7 @@ public class QuizActivity extends Activity {
         ((ImageView) findViewById(R.id.chest_01)).setImageResource(R.drawable.little_chest_color);
         ((ImageView) findViewById(R.id.chest_02)).setImageResource(R.drawable.little_chest_color);
         ((ImageView) findViewById(R.id.chest_03)).setImageResource(R.drawable.little_chest_color);
-        ((TextView)  findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
+        ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
 
         createJsonQuestion();
         //makeMathQuestion();
@@ -101,7 +102,7 @@ public class QuizActivity extends Activity {
             public void onClick(View v) {
                 if (button2.getText().equals(correct)) {
                     correctAnswers();
-                } else{
+                } else {
                     wrongAnswers();
                 }
             }
@@ -138,7 +139,7 @@ public class QuizActivity extends Activity {
         //dialog.setTitle("Dialog Box");
         TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
         //image.setImageResource(R.drawable.dialog2_bg);
-       text.setOnClickListener(new View.OnClickListener() {
+        text.setOnClickListener(new View.OnClickListener() {
             public void onClick(View View3) {
                 dialog.dismiss();
             }
@@ -193,25 +194,25 @@ public class QuizActivity extends Activity {
         return json;
     }
 
-   /* @Override
-    public void onBackPressed() {
-        //Nothing will happen when you push back_buttom
-    }
- **/
+    /* @Override
+     public void onBackPressed() {
+         //Nothing will happen when you push back_buttom
+     }
+  **/
     private void correctVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {0, 250, 400, 1050};
         v.vibrate(pattern, -1);
     }
 
-    private void wrongVibrate(){
+    private void wrongVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {0, 100, 100, 100, 100, 100, 100, 100, 100, 500};
         v.vibrate(pattern, -1);
 
     }
 
-    private void correctSound(){
+    private void correctSound() {
         mp = MediaPlayer.create(this, R.raw.correctsound);
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -224,7 +225,7 @@ public class QuizActivity extends Activity {
         mp.start();
     }
 
-    private void wrongSound(){
+    private void wrongSound() {
         mp = MediaPlayer.create(this, R.raw.wrongsound);
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -237,17 +238,17 @@ public class QuizActivity extends Activity {
         mp.start();
     }
 
-    private void wrongAnswers(){
-        if(nbr_tries > 1) {
-            Toast.makeText(getApplicationContext(), "Du har " + (nbr_tries-1) + " försök kvar!" , Toast.LENGTH_LONG).show();
+    private void wrongAnswers() {
+        if (nbr_tries > 1) {
+            Toast.makeText(getApplicationContext(), "Du har " + (nbr_tries - 1) + " försök kvar!", Toast.LENGTH_LONG).show();
             createJsonQuestion();
             nbr_tries--;
-            ((TextView)  findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
+            ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
         } else {
-            Toast.makeText(getApplicationContext(), "Du klarade inte att öppna skatten, leta upp en ny!" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Du klarade inte att öppna skatten, leta upp en ny!", Toast.LENGTH_SHORT).show();
             nbr_tries--;
-            ((TextView)  findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
+            ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
             startActivity(new Intent(this, CompassActivity.class));
             finish();
@@ -256,29 +257,39 @@ public class QuizActivity extends Activity {
         wrongVibrate();
     }
 
+    //Måste ändras med poängen sedan
     private void correctAnswers() {
-        Toast.makeText(getApplicationContext(),correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
         correctVibrate();
         correctSound();
+        saveScore(100);
         startActivity(new Intent(this, CompassActivity.class));
         finish();
     }
 
     //Not in use, but nice to have
-    private void makeMathQuestion(){
+    private void makeMathQuestion() {
         Random rn = new Random();
         int answer1 = rn.nextInt(10) + 1;
         int answer2 = rn.nextInt(10) + 1;
         question.setText(answer1 + " + " + answer2 + " = ");
         int tempCorrect = answer1 + answer2;
 
-        for(int i = 0; i < 4; i++){
-            int nbr = rn.nextInt(tempCorrect*2);
-            if(nbr != tempCorrect){
+        for (int i = 0; i < 4; i++) {
+            int nbr = rn.nextInt(tempCorrect * 2);
+            if (nbr != tempCorrect) {
                 buttons.get(i).setText(Integer.toString(nbr));
             }
         }
         buttons.get(rn.nextInt(4)).setText(Integer.toString(tempCorrect));
         correct = String.valueOf(tempCorrect);
+    }
+
+    private void saveScore(int newScore) {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        int highScore = sharedPref.getInt(getString(R.string.saved_high_score), 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.saved_high_score),highScore+newScore);
+        editor.commit();
     }
 }

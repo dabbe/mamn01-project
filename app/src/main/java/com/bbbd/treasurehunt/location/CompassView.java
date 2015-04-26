@@ -20,7 +20,7 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
     private Path path;
     private SurfaceHolder holder;
     private DrawingThread thread;
-    private Paint pathPaint, borderPaint;
+    private Paint pathPaint, borderPaint, textPaint;
 
     private CompassActivity activity;
     private Compass compass;
@@ -58,6 +58,10 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
         borderPaint.setColor(Color.BLACK);
         borderPaint.setStrokeWidth(6f);
         borderPaint.setStyle(Paint.Style.STROKE);
+
+        textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(80f);
 
         path = new Path();
         path.moveTo(width / 2f, height / 2f - arrowHeight);
@@ -105,6 +109,8 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void drawCompass(Canvas canvas) {
         Location location = activity.getLastLocation();
+        pathPaint.setColor(activity.getDistanceColor());
+
         if (location != null) {
             float deg = compass.getDegrees(location);
             canvas.save();
@@ -114,7 +120,7 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
             canvas.drawPath(path, borderPaint);
             canvas.restore();
         } else {
-            canvas.drawText("No location found. :(",  (int)(width / 2f), (int)((height / 2f) - ((borderPaint.descent() + borderPaint.ascent()) / 2)), borderPaint);
+            canvas.drawText("No location found. :(", 0, (int) ((height / 2f) - ((textPaint.descent() + textPaint.ascent()) / 2)), textPaint);
         }
     }
 }

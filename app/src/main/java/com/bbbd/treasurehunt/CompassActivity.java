@@ -9,6 +9,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,6 +21,15 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by dabbe on 13 Apr.
@@ -29,45 +39,66 @@ public class CompassActivity extends Activity implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, View.OnClickListener {
 
-    //mmö->simris->trellan->stlm
-    private static final float lat[] = {55.602177f, 55.557194f, 55.376107f, 59.329119f};
-    private static final float lon[] = {13.002601f, 14.348759f, 13.157209f, 18.065136f};
+    //malmö,
+    private static final float lat = 55.598821f;
+    private static final float lon = 12.993877f;
 
     private String TAG = "CompassActivity.java";
     private Compass compass;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location lastLocation;
-    private CompassView compassView;
+    private Location targetLocation;
+    private VibrationThread t;
+
+    private ArrayList<Treasure> treasures;
+    private Random rnd;
+
+    private long distanceFactor = 1000;
+    private int distanceColor = 0xFFFF0000;
+
+    private int closeColor = 0x00FF00;
+    private int farColor = 0x0B2403;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compass);
-        initButtons();
+        initializeGUI();
+        initialize();
+    }
 
-        Location target = new Location("");
-        target.setLatitude(lat[0]);
-        target.setLongitude(lon[0]);
-
-        compass = new Compass(this, target);
-        compassView = new CompassView(this, compass);
-        compassView.setOnClickListener(this);
-        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
-
+    private void initialize() {
+        loadTreasures();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        rnd = new Random();
     }
 
-    private void initButtons() {
-        findViewById(R.id.btn_malmo).setOnClickListener(this);
-        findViewById(R.id.btn_simrishamn).setOnClickListener(this);
-        findViewById(R.id.btn_sthlm).setOnClickListener(this);
-        findViewById(R.id.btn_tbg).setOnClickListener(this);
+    private void initializeGUI() {
+        targetLocation = new Location("");
+        targetLocation.setLatitude(lat);
+        targetLocation.setLongitude(lon);
+        compass = new Compass(this, targetLocation);
+        CompassView compassView = new CompassView(this, compass);
+        compassView.setOnClickListener(this);
+        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
+
+    }
+
+    private void navigateToNextTreasure() {
+        //update gui showing remaining treasures
+        if (treasures.size() == 0) {
+            //klar med spelet - dialog elr någonting?
+            finish();
+        } else {
+            //borde inte ta bort, borde loopa igenom alla o kolla om man har samlat ihop dom
+            compass.setTargetLocation(treasures.remove(rnd.nextInt(treasures.size())).getLocation());
+        }
     }
 
     @Override
@@ -88,14 +119,9 @@ public class CompassActivity extends Activity implements
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000);
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (lastLocation != null) {
-            System.out.println(lastLocation);
-            //mLatitudeText.setText(String.valueOf(lastLocation.getLatitude()));
-            //mLongitudeText.setText(String.valueOf(lastLocation.getLongitude()));
-        } else {
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (lastLocation == null) {
+            //Stänga av elr någonting? varning?
             System.out.println("Location unavailable :(");
         }
     }
@@ -113,18 +139,33 @@ public class CompassActivity extends Activity implements
         b.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 //finish();
             }
         });
         b.setCancelable(false);
         b.show();
-
     }
 
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
+        float meters = lastLocation.distanceTo(targetLocation);
+        float pause;
+        if (meters >= 100) {
+            pause = 1000;
+        } else {
+            pause = 9f * meters + 100f;
+        }
+        this.distanceFactor = (long) pause;
+
+        float distance = Math.min(100, meters);
+        float distanceFactor = distance / 100f;
+
+        int alpha = 255 << 24;
+        int red = (int) (distanceFactor * (((farColor & 0xFF0000) >> 16) - ((closeColor & 0xFF0000) >> 16)) + ((closeColor & 0xFF0000) >> 16)) << 16;
+        int green = (int) (distanceFactor * (((farColor & 0x00FF00) >> 8) - ((closeColor & 0x00FF00) >> 8)) + ((closeColor & 0x00FF00) >> 8)) << 8;
+        int blue = (int) (distanceFactor * ((farColor & 0x0000FF) - (closeColor & 0x0000FF)) + (closeColor & 0x0000FF));
+        distanceColor = alpha + red + green + blue;
     }
 
     public Location getLastLocation() {
@@ -142,40 +183,88 @@ public class CompassActivity extends Activity implements
 
     @Override
     public void onClick(View v) {
-        Location l = new Location("");
-        switch (v.getId()) {
-            case R.id.btn_malmo:
-                l.setLatitude(lat[0]);
-                l.setLongitude(lon[0]);
-                break;
-            case R.id.btn_simrishamn:
-                l.setLatitude(lat[1]);
-                l.setLongitude(lon[1]);
-                break;
-            case R.id.btn_tbg:
-                l.setLatitude(lat[2]);
-                l.setLongitude(lon[2]);
-                break;
-            case R.id.btn_sthlm:
-                l.setLatitude(lat[3]);
-                l.setLongitude(lon[3]);
-                break;
-            default:
-                startActivity(new Intent(this, DigActivity.class));
-                return;
-        }
-        compass.setTargetLocation(l);
+        startActivity(new Intent(this, DigActivity.class));
     }
 
-    //stänga av location osv
+    //stänga av location osv + vibration thread
     @Override
     protected void onPause() {
         super.onPause();
+        if (t != null) t.setInterrupted(true);
     }
 
     //sätta på location osv
     @Override
     protected void onResume() {
         super.onResume();
+        if (t != null)
+            t.setInterrupted(true);
+        t = new VibrationThread(this);
+        t.start();
+        navigateToNextTreasure();
+    }
+
+    /**
+     * Returns the color indicator for the compassView arrow depending on distance from target location
+     *
+     * @return
+     */
+    public synchronized int getDistanceColor() {
+        return distanceColor;
+    }
+
+    /**
+     * Returns the distance factor, i.e. the time the vibration thread should be paused
+     *
+     * @return
+     */
+    public synchronized long getDistanceFactor() {
+        return distanceFactor;
+    }
+
+    private void loadTreasures(){
+            String json = null;
+            try {
+                InputStream is = getResources().openRawResource(R.raw.treasures);
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+                json = new String(buffer, "UTF-8");
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Treasure>>(){}.getType();
+                treasures = gson.fromJson(json, type);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+    }
+
+    private static class VibrationThread extends Thread {
+
+        private Vibrator vibrator;
+        private CompassActivity activity;
+        private boolean interrupted = false;
+
+        public VibrationThread(CompassActivity activity) {
+            this.activity = activity;
+            vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+        }
+
+        public void setInterrupted(boolean b) {
+            this.interrupted = b;
+        }
+
+        @Override
+        public void run() {
+            while (!interrupted) {
+                long pause = activity.getDistanceFactor();
+                vibrator.vibrate(120);
+                try {
+                    sleep(pause + 120);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

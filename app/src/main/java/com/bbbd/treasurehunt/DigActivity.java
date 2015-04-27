@@ -17,7 +17,7 @@ import android.widget.TextView;
 public class DigActivity extends Activity implements SensorEventListener{
 
     Float azimut, pitch, roll;  // View to draw a compass
-    TextView x, y, z;
+    //TextView x, y, z;
     CheckBox digg1, digg2;
     boolean firstDigg, down, down2;
     int y_zero;
@@ -30,9 +30,9 @@ public class DigActivity extends Activity implements SensorEventListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dig);
-        x = (TextView) findViewById(R.id.x);
-        y = (TextView) findViewById(R.id.y);
-        z = (TextView) findViewById(R.id.z);
+//        x = (TextView) findViewById(R.id.x);
+//        y = (TextView) findViewById(R.id.y);
+//        z = (TextView) findViewById(R.id.z);
         digg1 = (CheckBox) findViewById(R.id.Digg1);
         digg2 = (CheckBox) findViewById(R.id.Digg2);
         firstDigg = false;
@@ -84,9 +84,9 @@ public class DigActivity extends Activity implements SensorEventListener{
                 pitch = orientation[1];
                 roll = orientation[2];
                 y_axis = Math.toDegrees(pitch);
-                x.setText("X: " + Double.toString(Math.toDegrees(azimut)));
-                y.setText("Y: " + y_axis);
-                z.setText("Z: " + Double.toString(Math.toDegrees(roll)));
+//                x.setText("X: " + Double.toString(Math.toDegrees(azimut)));
+//                y.setText("Y: " + y_axis);
+//                z.setText("Z: " + Double.toString(Math.toDegrees(roll)));
                 if(y_axis > 30 && y_axis < 50 && !firstDigg){
                     down = true;
                 }

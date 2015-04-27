@@ -23,7 +23,7 @@ We have come far and we are a bit puzzled by how far we have come. Every screen 
 
 The digging screen uses the gyroscope to look for changes in tilting of the device. It has not been decided exactly how the movement will be but we have tried a few which all works. 
  
-Användartest 26/4 (inte färdigutvecklad prototyp):
+### Användartest 26/4 (inte färdigutvecklad prototyp):
 8 åring (tillhör toppskitet i klassen) - Tyckte idéen var intressant och provade alla moment utom compass (fick inte att fungera). 
 Grävning - inte helt lätt att förstå först hur man skulle göra, och visste inte när man lyckats (skulle behövas bättre feedback). Men när man sa "använd telefonen som en spade", var det rätt intuitivt.
 Blåsning - Började först blåsa på skärmen, men efter att berätta att man skulle blåsa undertill på telefonen så gick det bra. (Behövs någon typ av feedback, då man inte ser skärmen så lätt när man blåser)

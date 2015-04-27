@@ -159,13 +159,16 @@ public class CompassActivity extends Activity implements
         this.distanceFactor = (long) pause;
 
         float distance = Math.min(100, meters);
-        float distanceFactor = distance / 100f;
-
-        int alpha = 255 << 24;
-        int red = (int) (distanceFactor * (((farColor & 0xFF0000) >> 16) - ((closeColor & 0xFF0000) >> 16)) + ((closeColor & 0xFF0000) >> 16)) << 16;
-        int green = (int) (distanceFactor * (((farColor & 0x00FF00) >> 8) - ((closeColor & 0x00FF00) >> 8)) + ((closeColor & 0x00FF00) >> 8)) << 8;
-        int blue = (int) (distanceFactor * ((farColor & 0x0000FF) - (closeColor & 0x0000FF)) + (closeColor & 0x0000FF));
-        distanceColor = alpha + red + green + blue;
+        if(distance <= 10){
+            startActivity(new Intent(this, DigActivity.class));
+        } else {
+            float distanceFactor = distance / 100f;
+            int alpha = 255 << 24;
+            int red = (int) (distanceFactor * (((farColor & 0xFF0000) >> 16) - ((closeColor & 0xFF0000) >> 16)) + ((closeColor & 0xFF0000) >> 16)) << 16;
+            int green = (int) (distanceFactor * (((farColor & 0x00FF00) >> 8) - ((closeColor & 0x00FF00) >> 8)) + ((closeColor & 0x00FF00) >> 8)) << 8;
+            int blue = (int) (distanceFactor * ((farColor & 0x0000FF) - (closeColor & 0x0000FF)) + (closeColor & 0x0000FF));
+            distanceColor = alpha + red + green + blue;
+        }
     }
 
     public Location getLastLocation() {

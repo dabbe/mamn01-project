@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -262,6 +263,7 @@ public class QuizActivity extends Activity {
         Toast.makeText(getApplicationContext(), correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
         correctVibrate();
         correctSound();
+
         saveScore(100);
         startActivity(new Intent(this, CompassActivity.class));
         finish();
@@ -286,10 +288,10 @@ public class QuizActivity extends Activity {
     }
 
     private void saveScore(int newScore) {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        int highScore = sharedPref.getInt(getString(R.string.saved_high_score), 0);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int highScore = sharedPref.getInt("high", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.saved_high_score),highScore+newScore);
+        editor.putInt("high",highScore+newScore);
         editor.commit();
     }
 }

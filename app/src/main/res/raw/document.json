@@ -1,24 +1,24 @@
 {
    "math1":[{	
-		"question": "3 + 4",
-		"false1": "1",
-		"false2": "2",
-		"false3": "3",
-		"correct": "7"
+		"question": "23 + 14",
+		"false1": "25",
+		"false2": "32",
+		"false3": "41",
+		"correct": "37"
 	},
 	{
-		"question": "4 + 5",
-		"false1": "4",
-		"false2": "5",
-		"false3": "6",
-		"correct": "9"
+		"question": "14 + 5",
+		"false1": "20",
+		"false2": "17",
+		"false3": "16",
+		"correct": "19"
 	},
 	{
-		"question": "5 + 6",
-		"false1": "7",
-		"false2": "8",
-		"false3": "9",
-		"correct": "11"
+		"question": "18 - 6",
+		"false1": "11",
+		"false2": "13",
+		"false3": "24",
+		"correct": "12"
 	},
 	{
      		"question": "(112 + 58 - 32) * 13",

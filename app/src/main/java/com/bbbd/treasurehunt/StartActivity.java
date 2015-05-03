@@ -16,7 +16,7 @@ import static android.content.Context.MODE_WORLD_READABLE;
  * mod 14 apr by christian
  */
 public class StartActivity extends Activity {
-
+    public static boolean firstDigHint = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

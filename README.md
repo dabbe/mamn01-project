@@ -1,6 +1,13 @@
 # mamn01-project
 Project for the Advanced Interaction Design (MAMN01) at LTH
 
+## Notes for the report
+
+* Infoga testprotokoll, hur gick det till när användarna testade? Varför? Kan vi lära något utav det?
+* Lägga till use cases
+* Hur valde vi sensorerna och momenten? 
+* Vad trodde vi att användarna skulle säga och reagera? Vad tydde de på? Analys
+
 ## Weeklog
 ### Week 1
 This week we started by presenting the idea for our application for the rest of the group.

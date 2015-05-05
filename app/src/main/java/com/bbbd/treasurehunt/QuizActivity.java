@@ -254,7 +254,6 @@ public class QuizActivity extends Activity {
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
-            startActivity(new Intent(this, CompassActivity.class));
             finish();
         }
         wrongSound();
@@ -266,9 +265,7 @@ public class QuizActivity extends Activity {
         Toast.makeText(getApplicationContext(), correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
         correctVibrate();
         correctSound();
-
         saveScore(100);
-        startActivity(new Intent(this, CompassActivity.class));
         finish();
     }
 

@@ -52,7 +52,6 @@ public class QuizActivity extends Activity {
 
     MediaPlayer mp = null;
 
-    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +132,7 @@ public class QuizActivity extends Activity {
     }
 
     private void createDialog() {
-        final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_quiz);
         dialog.setCanceledOnTouchOutside(false);
@@ -268,6 +267,7 @@ public class QuizActivity extends Activity {
 
     //Not in use, but nice to have
     private void makeMathQuestion() {
+
         Random rn = new Random();
         int answer1 = rn.nextInt(10) + 1;
         int answer2 = rn.nextInt(10) + 1;

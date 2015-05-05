@@ -104,12 +104,10 @@ public class CompassActivity extends Activity implements
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
         super.onStop();
     }
 
@@ -159,7 +157,7 @@ public class CompassActivity extends Activity implements
         this.distanceFactor = (long) pause;
 
         float distance = Math.min(100, meters);
-        if(distance <= 10){
+        if(distance <= 5){
             startActivity(new Intent(this, DigActivity.class));
         } else {
             float distanceFactor = distance / 100f;
@@ -189,19 +187,20 @@ public class CompassActivity extends Activity implements
         startActivity(new Intent(this, DigActivity.class));
     }
 
-    //stänga av location osv + vibration thread
     @Override
     protected void onPause() {
+        mGoogleApiClient.disconnect();
         super.onPause();
         if (t != null) t.setInterrupted(true);
     }
 
-    //sätta på location osv
     @Override
     protected void onResume() {
         super.onResume();
-        if (t != null)
+        mGoogleApiClient.connect();
+        if (t != null) {
             t.setInterrupted(true);
+        }
         t = new VibrationThread(this);
         t.start();
         navigateToNextTreasure();

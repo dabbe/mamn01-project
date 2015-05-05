@@ -1,6 +1,13 @@
 # mamn01-project
 Project for the Advanced Interaction Design (MAMN01) at LTH
 
+## Notes for the report
+
+* Infoga testprotokoll, hur gick det till när användarna testade? Varför? Kan vi lära något utav det?
+* Lägga till use cases
+* Hur valde vi sensorerna och momenten? 
+* Vad trodde vi att användarna skulle säga och reagera? Vad tydde de på? Analys
+
 ## Weeklog
 ### Week 1
 This week we started by presenting the idea for our application for the rest of the group.
@@ -23,3 +30,13 @@ We have come far and we are a bit puzzled by how far we have come. Every screen 
 
 The digging screen uses the gyroscope to look for changes in tilting of the device. It has not been decided exactly how the movement will be but we have tried a few which all works. 
  
+### Användartest 26/4 (inte färdigutvecklad prototyp):
+8 åring (tillhör toppskitet i klassen) - Tyckte idéen var intressant och provade alla moment utom compass (fick inte att fungera). 
+Grävning - inte helt lätt att förstå först hur man skulle göra, och visste inte när man lyckats (skulle behövas bättre feedback). Men när man sa "använd telefonen som en spade", var det rätt intuitivt.
+Blåsning - Började först blåsa på skärmen, men efter att berätta att man skulle blåsa undertill på telefonen så gick det bra. (Behövs någon typ av feedback, då man inte ser skärmen så lätt när man blåser)
+Quiz - Tog liten stund att läsa, men gick bra. De 3 vanliga talen var lätt/lagom (lär sig multiplication i skolan idag i hans ålder). Ljudfeedback var lite roligt tyckte testpersonen. Men förstod inte * tecknet, förstod inte att det var multiplikation.
+
+10 åring (tillhör toppskitet i klassen) - Gav samma feedback som 8 åring, hade dock enklare att läsa dialogskärmen på quizen. 
+De ser fram emot att prova en mer fungerande app :)
+
+Med lite instruktioner innan varje aktivitet kan nog göra det lättare, och lite mer ljudfeedback (många spel de annars spelar bygger mest på ljudfeedback)

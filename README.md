@@ -40,3 +40,9 @@ Quiz - Tog liten stund att läsa, men gick bra. De 3 vanliga talen var lätt/lag
 De ser fram emot att prova en mer fungerande app :)
 
 Med lite instruktioner innan varje aktivitet kan nog göra det lättare, och lite mer ljudfeedback (många spel de annars spelar bygger mest på ljudfeedback)
+
+### Möte 5/5
+Jacob: Bilder, blåsa bort sand effekt.
+Oscar: Bild från Jacob, snygga till designen, checkbox på startskärmen.
+Christian: Fler frågor och i olika nivåer, (nivå 1: math1 osv.), kategorier (math, geo, historia)
+Daniel: Fixa färdigt kompass skärmen.

@@ -115,11 +115,14 @@ public class BlowActivity extends Activity{
     private void transitionToNextScene(){
         stop();
         startActivity(new Intent(this, QuizActivity.class));
+        finish();
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             startActivity(new Intent(this, QuizActivity.class));
+            finish();
+        }
         return true;
     }
     private void createDialog() {

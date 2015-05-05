@@ -49,6 +49,7 @@ public class QuizActivity extends Activity {
     final private String correctAnswerFirst = "Du får ";
     final private String correctAnswerLast = " poäng!";
 
+    private String typeQuestion;
 
     MediaPlayer mp = null;
 
@@ -58,6 +59,8 @@ public class QuizActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        typeQuestion = getIntent().getExtras().getString("namn");
 
         // Assign the buttons
         button1 = (Button) findViewById(R.id.b_ans1);
@@ -154,7 +157,7 @@ public class QuizActivity extends Activity {
         try {
             //Take out information of the random JSon Object with given name
             JSONObject obj = new JSONObject(s);
-            JSONArray jArry = obj.getJSONArray("math1");
+            JSONArray jArry = obj.getJSONArray(typeQuestion);
             Random rand = new Random();
             JSONObject firstObj = jArry.getJSONObject(rand.nextInt(jArry.length()));
             question.setText(firstObj.getString("question"));

@@ -91,13 +91,18 @@ public class CompassActivity extends Activity implements
     }
 
     private void navigateToNextTreasure() {
-        //update gui showing remaining treasures
+            //update gui showing remaining treasures
         if (treasures.size() == 0) {
             //klar med spelet - dialog elr någonting?
             finish();
         } else {
             //borde inte ta bort, borde loopa igenom alla o kolla om man har samlat ihop dom
-            compass.setTargetLocation(treasures.remove(rnd.nextInt(treasures.size())).getLocation());
+            int rand = rnd.nextInt(treasures.size());
+            Treasure t1 = treasures.get(rand);
+            compass.setTargetLocation(t1.getLocation());
+            targetLocation.setLatitude(t1.getLocation().getLatitude());
+            targetLocation.setLongitude(t1.getLocation().getLongitude());
+            treasures.remove(rand);
         }
     }
 

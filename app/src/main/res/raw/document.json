@@ -22,11 +22,224 @@
       "correct": "12"
     },
     {
-      "question": "(112 + 58 - 32) * 13",
-      "false1": "1632",
-      "false2": "1968",
-      "false3": "1876",
-      "correct": "1794"
-    }
-  ]
+      "question": "58 + 13",
+      "false1": "61",
+      "false2": "67",
+      "false3": "83",
+      "correct": "71"
+    },
+         {
+           "question": "14 + 15",
+           "false1": "20",
+           "false2": "19",
+           "false3": "26",
+           "correct": "29"
+         },
+         {
+           "question": "28 - 6",
+           "false1": "12",
+           "false2": "18",
+           "false3": "24",
+           "correct": "22"
+         },
+         {
+           "question": "18 + 13",
+           "false1": "21",
+           "false2": "35",
+           "false3": "34",
+           "correct": "31"
+         },
+        {
+          "question": "14 + 25",
+          "false1": "28",
+          "false2": "37",
+          "false3": "26",
+          "correct": "29"
+        },
+        {
+          "question": "18 - 16",
+          "false1": "3",
+          "false2": "6",
+          "false3": "4",
+          "correct": "2"
+        },
+        {
+          "question": "3 x 3",
+          "false1": "12",
+          "false2": "10",
+          "false3": "8",
+          "correct": "9"
+        }
+  ],
+  "math2": [
+      {
+        "question": "23 + 14 + 2",
+        "false1": "25",
+        "false2": "32",
+        "false3": "41",
+        "correct": "29"
+      },
+           {
+             "question": "14 + 15 -3",
+             "false1": "20",
+             "false2": "19",
+             "false3": "26",
+             "correct": "26"
+           },
+           {
+             "question": "28 - 6 + 6",
+             "false1": "12",
+             "false2": "18",
+             "false3": "24",
+             "correct": "28"
+           },
+           {
+             "question": "8 x 5 ",
+             "false1": "35",
+             "false2": "50",
+             "false3": "45",
+             "correct": "40"
+           },
+          {
+            "question": "140 + 25",
+            "false1": "160",
+            "false2": "155",
+            "false3": "185",
+            "correct": "165"
+          },
+          {
+            "question": "18 - 16 + 7",
+            "false1": "8",
+            "false2": "6",
+            "false3": "2",
+            "correct": "9"
+          },
+          {
+            "question": "3 x 9",
+            "false1": "25",
+            "false2": "39",
+            "false3": "37",
+            "correct": "27"
+          },
+                {
+                  "question": "154 - 25 + 5",
+                  "false1": "160",
+                  "false2": "155",
+                  "false3": "185",
+                  "correct": "165"
+                },
+                {
+                  "question": "18 - 6 + 7",
+                  "false1": "18",
+                  "false2": "16",
+                  "false3": "21",
+                  "correct": "19"
+                },
+                {
+                  "question": "(3 x 9) + 5",
+                  "false1": "35",
+                  "false2": "30",
+                  "false3": "37",
+                  "correct": "32"
+                }
+  ],
+  "math3": [
+      {
+        "question": "23 + 14",
+        "false1": "25",
+        "false2": "32",
+        "false3": "41",
+        "correct": "37"
+      },
+      {
+        "question": "14 + 5",
+        "false1": "20",
+        "false2": "17",
+        "false3": "16",
+        "correct": "19"
+      },
+      {
+        "question": "18 - 6",
+        "false1": "11",
+        "false2": "13",
+        "false3": "24",
+        "correct": "12"
+      },
+      {
+        "question": "58 + 13",
+        "false1": "61",
+        "false2": "67",
+        "false3": "83",
+        "correct": "71"
+      },
+           {
+             "question": "14 + 15",
+             "false1": "20",
+             "false2": "19",
+             "false3": "26",
+             "correct": "29"
+           },
+           {
+             "question": "28 - 6",
+             "false1": "12",
+             "false2": "18",
+             "false3": "24",
+             "correct": "22"
+           },
+           {
+             "question": "18 + 13",
+             "false1": "21",
+             "false2": "35",
+             "false3": "34",
+             "correct": "31"
+           },
+          {
+            "question": "14 + 25",
+            "false1": "28",
+            "false2": "37",
+            "false3": "26",
+            "correct": "29"
+          },
+          {
+            "question": "18 - 16",
+            "false1": "3",
+            "false2": "6",
+            "false3": "4",
+            "correct": "2"
+          },
+          {
+            "question": "3 x 3",
+            "false1": "12",
+            "false2": "10",
+            "false3": "8",
+            "correct": "9"
+          }
+    ],
+    "geo1": [
+          {
+            "question": "Vilken är Sveriges huvudstad",
+            "false1": "Malmö",
+            "false2": "Göteborg",
+            "false3": "Svedala",
+            "correct": "Stockholm"
+          }
+    ],
+    "geo2": [
+              {
+                "question": "I vilket land ligger Paris",
+                "false1": "Spanien",
+                "false2": "Österrike",
+                "false3": "Norge",
+                "correct": "Frankrike"
+              }
+    ],
+    "geo3": [
+              {
+                "question": "Vilket av nordens länder är störst, sett till yta",
+                "false1": "Sverige",
+                "false2": "Norge",
+                "false3": "Finland",
+                "correct": "Danmark"
+              }
+    ]
 }

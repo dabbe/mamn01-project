@@ -59,9 +59,9 @@ public class QuizActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        typeQuestion = getIntent().getExtras().getString("namn");
+        //typeQuestion = getIntent().getExtras().getString("namn");
         // Ska ändras när de andra är implementerat
-        typeQuestion = "math1";
+        typeQuestion = "geo3";
 
         // Assign the buttons
         button1 = (Button) findViewById(R.id.b_ans1);

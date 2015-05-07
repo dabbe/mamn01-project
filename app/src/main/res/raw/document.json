@@ -241,5 +241,33 @@
                 "false3": "Finland",
                 "correct": "Danmark"
               }
-    ]
+    ],
+        "historia1": [
+              {
+                "question": "Vilket land stred Sverige mot i Kalmarkriget?",
+                "false1": "Norge",
+                "false2": "Ryssland",
+                "false3": "Tyskland",
+                "correct": "Danmark"
+              }
+        ],
+        "historia2": [
+                  {
+                    "question": "Vilken nationalitet hade Christoffer Columbus?",
+                    "false1": "Spanjor",
+                    "false2": "Tysk",
+                    "false3": "Norsk",
+                    "correct": "Italiensk"
+                  }
+        ],
+        "historia3": [
+                  {
+                    "question": "Vilket år dog den sovjetiske ledaren Josef Stalin",
+                    "false1": "1955",
+                    "false2": "1957",
+                    "false3": "1945",
+                    "correct": "1953"
+                  }
+        ]
+
 }

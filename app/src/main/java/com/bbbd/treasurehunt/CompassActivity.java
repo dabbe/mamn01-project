@@ -2,17 +2,23 @@ package com.bbbd.treasurehunt;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bbbd.treasurehunt.location.Compass;
 import com.bbbd.treasurehunt.location.CompassView;
@@ -38,10 +44,11 @@ public class CompassActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, View.OnClickListener {
-
     //malmö,
     private static final float lat = 55.598821f;
     private static final float lon = 12.993877f;
+
+    private ProgressDialog loadingDialog;
 
     private String TAG = "CompassActivity.java";
     private Compass compass;
@@ -87,11 +94,37 @@ public class CompassActivity extends Activity implements
         CompassView compassView = new CompassView(this, compass);
         compassView.setOnClickListener(this);
         ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setCancelable(false);
+        loadingDialog.setMessage("Laddar..");
+        loadingDialog.show();
+        createDialog();
 
     }
 
+
+    private void createDialog() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean b = prefs.getBoolean("first", true);
+        if (b) {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_compass);
+            dialog.setCanceledOnTouchOutside(false);
+            TextView text = (TextView) dialog.findViewById(R.id.descript_compass);
+            text.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View View3) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+            prefs.edit().putBoolean("first", false).apply();
+        }
+    }
+
+
     private void navigateToNextTreasure() {
-            //update gui showing remaining treasures
+        //update gui showing remaining treasures
         if (treasures.size() == 0) {
             //klar med spelet - dialog elr någonting?
             finish();
@@ -151,6 +184,7 @@ public class CompassActivity extends Activity implements
 
     @Override
     public void onLocationChanged(Location location) {
+        loadingDialog.cancel();
         lastLocation = location;
         float meters = lastLocation.distanceTo(targetLocation);
         float pause;
@@ -162,7 +196,7 @@ public class CompassActivity extends Activity implements
         this.distanceFactor = (long) pause;
 
         float distance = Math.min(100, meters);
-        if(distance <= 5){
+        if (distance <= 5) {
             startActivity(new Intent(this, DigActivity.class));
         } else {
             float distanceFactor = distance / 100f;
@@ -229,21 +263,22 @@ public class CompassActivity extends Activity implements
         return distanceFactor;
     }
 
-    private void loadTreasures(){
-            String json = null;
-            try {
-                InputStream is = getResources().openRawResource(R.raw.treasures);
-                int size = is.available();
-                byte[] buffer = new byte[size];
-                is.read(buffer);
-                is.close();
-                json = new String(buffer, "UTF-8");
-                Gson gson = new Gson();
-                Type type = new TypeToken<List<Treasure>>(){}.getType();
-                treasures = gson.fromJson(json, type);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+    private void loadTreasures() {
+        String json = null;
+        try {
+            InputStream is = getResources().openRawResource(R.raw.treasures);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Treasure>>() {
+            }.getType();
+            treasures = gson.fromJson(json, type);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private static class VibrationThread extends Thread {

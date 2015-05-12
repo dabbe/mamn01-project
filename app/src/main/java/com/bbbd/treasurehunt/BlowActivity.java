@@ -47,7 +47,6 @@ public class BlowActivity extends Activity{
         public void run() {
             double amp = mSensor.getAmplitude();
             if ((amp > threshold)) progress += amp;
-            mStatusView.setText("" + progress);
 
             // Runnable(mPollTask) will again execute after POLL_INTERVAL
             mHandler.postDelayed(mPollTask, POLL_INTERVAL);
@@ -65,8 +64,6 @@ public class BlowActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
-        mStatusView = (TextView) findViewById(R.id.soundMeter);
-        mStatusView.setText("Blow away the sand!");
         mSensor = new SoundMeter();
         progress = 0;
         sand = (ImageView) findViewById(R.id.sandImage);

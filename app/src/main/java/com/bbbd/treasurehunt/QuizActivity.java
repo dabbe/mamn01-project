@@ -49,15 +49,19 @@ public class QuizActivity extends Activity {
     final private String correctAnswerFirst = "Du får ";
     final private String correctAnswerLast = " poäng!";
 
+    private String typeQuestion;
 
     MediaPlayer mp = null;
 
-    final Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        //typeQuestion = getIntent().getExtras().getString("namn");
+        // Ska ändras när de andra är implementerat
+        typeQuestion = "geo3";
 
         // Assign the buttons
         button1 = (Button) findViewById(R.id.b_ans1);
@@ -133,7 +137,7 @@ public class QuizActivity extends Activity {
     }
 
     private void createDialog() {
-        final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_quiz);
         dialog.setCanceledOnTouchOutside(false);
@@ -154,7 +158,7 @@ public class QuizActivity extends Activity {
         try {
             //Take out information of the random JSon Object with given name
             JSONObject obj = new JSONObject(s);
-            JSONArray jArry = obj.getJSONArray("math1");
+            JSONArray jArry = obj.getJSONArray(typeQuestion);
             Random rand = new Random();
             JSONObject firstObj = jArry.getJSONObject(rand.nextInt(jArry.length()));
             question.setText(firstObj.getString("question"));
@@ -251,7 +255,6 @@ public class QuizActivity extends Activity {
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
-            startActivity(new Intent(this, CompassActivity.class));
             finish();
         }
         wrongSound();
@@ -263,14 +266,13 @@ public class QuizActivity extends Activity {
         Toast.makeText(getApplicationContext(), correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
         correctVibrate();
         correctSound();
-
         saveScore(100);
-        startActivity(new Intent(this, CompassActivity.class));
         finish();
     }
 
     //Not in use, but nice to have
     private void makeMathQuestion() {
+
         Random rn = new Random();
         int answer1 = rn.nextInt(10) + 1;
         int answer2 = rn.nextInt(10) + 1;

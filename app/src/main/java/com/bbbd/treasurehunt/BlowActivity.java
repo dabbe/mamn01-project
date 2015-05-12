@@ -1,16 +1,17 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.content.Context;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.util.Log;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.bbbd.treasurehunt.sound.*;
 
 /**
@@ -19,7 +20,7 @@ import com.bbbd.treasurehunt.sound.*;
 public class BlowActivity extends Activity{
     /* constants */
     private static final int POLL_INTERVAL = 300;
-    private static final int threshold = 5;
+    private static final int threshold = 6;
 
     /** running state **/
     private boolean mRunning = false;
@@ -65,10 +66,11 @@ public class BlowActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blow);
         mStatusView = (TextView) findViewById(R.id.soundMeter);
-        mStatusView.setText("Blow away the sound!");
+        mStatusView.setText("Blow away the sand!");
         mSensor = new SoundMeter();
         progress = 0;
         sand = (ImageView) findViewById(R.id.sandImage);
+        createDialog();
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "NoiseAlert");
@@ -113,11 +115,27 @@ public class BlowActivity extends Activity{
     private void transitionToNextScene(){
         stop();
         startActivity(new Intent(this, QuizActivity.class));
+        finish();
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             startActivity(new Intent(this, QuizActivity.class));
+            finish();
+        }
         return true;
+    }
+    private void createDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_blow);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView text = (TextView) dialog.findViewById(R.id.descript_blow);
+        text.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

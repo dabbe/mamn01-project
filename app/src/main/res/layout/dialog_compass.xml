@@ -15,14 +15,13 @@
         android:layout_height="0dp"
         android:layout_weight="0.7">
 
-
         <TextView
-            android:id="@+id/descript_quiz"
+            android:id="@+id/descript_compass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#80E8CB56"
             android:padding="20dp"
-            android:text="Hitta skatten genom att följa pilen! Pilen blir grönare och grönare ju närmare skatten du kommer. Dessutom vibrerar telefonen oftare när du kommer närmre. Ut och jaga med dig!"
+            android:text="Följ pilen för att hitta skatten. Pilen blir grönare och grönare och det vibrerar mer och mer ju närmre du kommer. Ut med dig och jaga rätt på skatterna!"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
 

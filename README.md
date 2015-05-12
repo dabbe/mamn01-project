@@ -1,6 +1,13 @@
 # mamn01-project
 Project for the Advanced Interaction Design (MAMN01) at LTH
 
+## Notes for the report
+
+* Infoga testprotokoll, hur gick det till när användarna testade? Varför? Kan vi lära något utav det?
+* Lägga till use cases
+* Hur valde vi sensorerna och momenten? 
+* Vad trodde vi att användarna skulle säga och reagera? Vad tydde de på? Analys
+
 ## Weeklog
 ### Week 1
 This week we started by presenting the idea for our application for the rest of the group.
@@ -33,3 +40,9 @@ Quiz - Tog liten stund att läsa, men gick bra. De 3 vanliga talen var lätt/lag
 De ser fram emot att prova en mer fungerande app :)
 
 Med lite instruktioner innan varje aktivitet kan nog göra det lättare, och lite mer ljudfeedback (många spel de annars spelar bygger mest på ljudfeedback)
+
+### Möte 5/5
+* Jacob: Bilder, blåsa bort sand effekt.
+* Oscar: Bild från Jacob, snygga till designen, checkbox på startskärmen.
+* Christian: Fler frågor och i olika nivåer, (nivå 1: math1 osv.), kategorier (math, geo, historia)
+* Daniel: Fixa färdigt kompasskärmen med dialog för hints samt loadingskärm medan location hämtas.

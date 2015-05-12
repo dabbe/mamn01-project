@@ -3,35 +3,42 @@
 	"lat": 55.600276,
 	"lon": 12.995636,
 	"type": "diamond",
-	"desc_text": "Denna diamant �gdes en g�ng i tiden av en hemsk pirat",
+	"desc_text": "Denna diamant ägdes en gång i tiden av en hemsk pirat",
 	"points": 10
   },
   {
 	"lat": 55.599946,
 	"lon": 12.993228,
 	"type": "ruby",
-	"desc_text": "Ute till havs �r rubiner mycket v�rda",
+	"desc_text": "Ute till havs är rubiner mycket värda",
 	"points": 3
   },
   {
 	"lat": 55.598837,
 	"lon": 12.993904,
 	"type": "sapphire",
-	"desc_text": "Legenden s�ger att bakom saffirens bl�a skikt ligger svaret till alla fr�gor",
+	"desc_text": "Legenden säger att bakom saffirens blåa skikt ligger svaret till alla frågor",
 	"points": 5
   },
   {
 	"lat": 55.598212,
 	"lon": 12.994269,
 	"type": "emerald",
-	"desc_text": "Smaragden h�ller m�nga hemligheter",
+	"desc_text": "Smaragden håller många hemligheter",
 	"points": 3
   },
   {
 	"lat": 55.599095,
 	"lon": 12.995878,
 	"type": "gold",
-	"desc_text": "P�sen inneh�ller ett par guldmynt",
+	"desc_text": "Påsen innehåller ett par guldmynt",
 	"points": 2
+  },
+  {
+	"lat": 55.710792,
+	"lon": 13.209638,
+	"type": "silver",
+	"desc_text": "Påsen innehåller ett par silvermynt",
+	"points": 10
   }
 ]

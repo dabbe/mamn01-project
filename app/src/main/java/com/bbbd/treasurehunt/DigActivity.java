@@ -89,7 +89,7 @@ public class DigActivity extends Activity implements SensorEventListener{
         });
         dialog.show();
     }
-    
+
 //If the Hint only should be shown the first time the game is started
 /*    private boolean isFirstTime()
     {

@@ -46,3 +46,12 @@ Med lite instruktioner innan varje aktivitet kan nog göra det lättare, och lit
 * Oscar: Bild från Jacob, snygga till designen, checkbox på startskärmen.
 * Christian: Fler frågor och i olika nivåer, (nivå 1: math1 osv.), kategorier (math, geo, historia)
 * Daniel: Fixa färdigt kompasskärmen med dialog för hints samt loadingskärm medan location hämtas.
+
+### Möte 12/5
+Vi har gjort ett testprotokoll som finns nedskrivet på papper
+Use case:
+* Start igong ett spel
+* Navigera till en skatt
+* Gräva upp skatten 
+* Blås bort sanden
+* Lös problem för att låsa upp skatten

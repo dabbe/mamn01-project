@@ -20,12 +20,12 @@ import android.widget.TextView;
 /**
  * Created by dabbe on 13 Apr.
  */
-public class DigActivity extends Activity implements SensorEventListener{
+public class DigActivity extends Activity implements SensorEventListener {
 
     Float azimut, pitch, roll;  // View to draw a compass
     //TextView x, y, z;
-    CheckBox digg1, digg2;
-    boolean firstDigg, down, down2;
+    CheckBox digg1, digg2, digg3;
+    boolean firstDigg, secondDigg, down, down2, down3;
 
     private SensorManager mSensorManager;
     Sensor accelerometer;
@@ -40,18 +40,18 @@ public class DigActivity extends Activity implements SensorEventListener{
 //        z = (TextView) findViewById(R.id.z);
         digg1 = (CheckBox) findViewById(R.id.Digg1);
         digg2 = (CheckBox) findViewById(R.id.Digg2);
+        digg3 = (CheckBox) findViewById(R.id.Digg3);
         firstDigg = false;
+        secondDigg = false;
         down = false;
         down2 = false;
+        down3 = false;
 
-        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        if(StartActivity.firstDigHint){
-            createDialog();
-            StartActivity.firstDigHint = false;
-        }
+        createDialog();
 
     }
 
@@ -59,7 +59,7 @@ public class DigActivity extends Activity implements SensorEventListener{
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN)
             startActivity(new Intent(this, BlowActivity.class));
-            finish();
+        finish();
         return true;
     }
 
@@ -106,13 +106,15 @@ public class DigActivity extends Activity implements SensorEventListener{
 
     private void digVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(200);
+        v.vibrate(250);
     }
 
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {  }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
     float[] mGravity;
     float[] mGeomagnetic;
+
     public void onSensorChanged(SensorEvent event) {
         double y_axis;
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
@@ -133,21 +135,35 @@ public class DigActivity extends Activity implements SensorEventListener{
 //                x.setText("X: " + Double.toString(Math.toDegrees(azimut)));
 //                y.setText("Y: " + y_axis);
 //                z.setText("Z: " + Double.toString(Math.toDegrees(roll)));
-                if(y_axis > 30 && y_axis < 50 && !firstDigg){
+                if (y_axis > 30 && y_axis < 50 && !firstDigg) {
+                    if (!down) {
+                        digVibrate();
+                    }
                     down = true;
-                    digVibrate();
-                }
-                else if(y_axis < -30 && y_axis > -50 && down){
+
+                } else if (y_axis < -30 && y_axis > -50 && down) {
                     digg1.setChecked(true);
                     firstDigg = true;
                 }
-                if(firstDigg){
-                    if(y_axis > 30 && y_axis < 50){
+                if (firstDigg) {
+                    if (y_axis > 30 && y_axis < 50) {
+                        if (!down2) {
+                            digVibrate();
+                        }
                         down2 = true;
-                        digVibrate();
-                    }
-                    else if(y_axis < -30 && y_axis > -50 && down2){
+                    } else if (y_axis < -30 && y_axis > -50 && down2) {
                         digg2.setChecked(true);
+                        secondDigg = true;
+                    }
+                }
+                if (firstDigg && secondDigg) {
+                    if (y_axis > 30 && y_axis < 50) {
+                        if (!down3) {
+                            digVibrate();
+                        }
+                        down3 = true;
+                    } else if (y_axis < -30 && y_axis > -50 && down3) {
+                        digg3.setChecked(true);
                     }
                 }
 

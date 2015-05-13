@@ -7,6 +7,7 @@ Project for the Advanced Interaction Design (MAMN01) at LTH
 * Lägga till use cases
 * Hur valde vi sensorerna och momenten? 
 * Vad trodde vi att användarna skulle säga och reagera? Vad tydde de på? Analys
+* vilka tekniker användes? Brainstorming! Bland annat 
 
 ## Weeklog
 ### Week 1

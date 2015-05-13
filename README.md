@@ -56,3 +56,7 @@ Use case:
 * Gräva upp skatten 
 * Blås bort sanden
 * Lös problem för att låsa upp skatten
+
+### Möte 13/5
+* bättre färger på kompassen 
+* bättre vibration 

@@ -8,6 +8,7 @@ Project for the Advanced Interaction Design (MAMN01) at LTH
 * Hur valde vi sensorerna och momenten? 
 * Vad trodde vi att användarna skulle säga och reagera? Vad tydde de på? Analys
 * vilka tekniker användes? Brainstorming! Bland annat 
+* Väljer flera interaktionselement för att förstärka kommunikationen med användaren
 
 ## Weeklog
 ### Week 1
@@ -60,3 +61,8 @@ Use case:
 ### Möte 13/5
 * bättre färger på kompassen 
 * bättre vibration 
+* 
+Danne: Fixa wakeLock, resume problem efter hittat första skatten, ok-knapp dialogruta, fixa dialogruta, finish ruta, byt till gul bakgrund, 
+Jacob: ok-knapp dialogruta, finish ruta, öka mängd sand att blåsa, 
+Oscar: ok-knapp dialogruta, finish ruta, gula bakgrund startskärm och bild med vägen, 
+Christian: ok-knapp dialogruta, finish ruta med ok, onbackpressed()

@@ -5,32 +5,42 @@
     android:orientation="vertical"
     android:weightSum="1.3">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="0.3">
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#80E8CB56"
+        android:gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_weight="0.7">
 
 
         <TextView
             android:id="@+id/descript_quiz"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#80E8CB56"
+            android:layout_height="wrap_content"
+
             android:padding="20dp"
-            android:text="Hitta skatten genom att följa pilen! Pilen blir grönare och grönare ju närmare skatten du kommer. Dessutom vibrerar telefonen oftare när du kommer närmre. Ut och jaga med dig!"
+            android:text="Nu måste du klara en fråga innan skatten öppnas, du har 3 försök på dig. \n\nSvarar du fel så får du en ny fråga, men svarar du rätt innan du använt alla dina tre försök så får du 100 poäng!"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Okej, jag förstår!"
+            android:gravity="center_vertical"
+            android:id="@+id/buttonOK"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/descript_quiz"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"></LinearLayout>
 
 </LinearLayout>

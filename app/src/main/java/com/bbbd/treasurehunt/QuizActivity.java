@@ -1,8 +1,10 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -85,9 +87,9 @@ public class QuizActivity extends Activity {
         chests.add((ImageView) findViewById(R.id.chest_01));
         chests.add((ImageView) findViewById(R.id.chest_02));
         chests.add((ImageView) findViewById(R.id.chest_03));
-        ((ImageView) findViewById(R.id.chest_01)).setImageResource(R.drawable.little_chest_color);
-        ((ImageView) findViewById(R.id.chest_02)).setImageResource(R.drawable.little_chest_color);
-        ((ImageView) findViewById(R.id.chest_03)).setImageResource(R.drawable.little_chest_color);
+        ((ImageView) findViewById(R.id.chest_01)).setImageResource(R.drawable.heart);
+        ((ImageView) findViewById(R.id.chest_02)).setImageResource(R.drawable.heart);
+        ((ImageView) findViewById(R.id.chest_03)).setImageResource(R.drawable.heart);
         ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
 
         createJsonQuestion();
@@ -143,8 +145,9 @@ public class QuizActivity extends Activity {
         dialog.setCanceledOnTouchOutside(false);
         //dialog.setTitle("Dialog Box");
         TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
+        Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK);
         //image.setImageResource(R.drawable.dialog2_bg);
-        text.setOnClickListener(new View.OnClickListener() {
+        buttonOk.setOnClickListener(new View.OnClickListener() {
             public void onClick(View View3) {
                 dialog.dismiss();
             }
@@ -249,12 +252,12 @@ public class QuizActivity extends Activity {
             createJsonQuestion();
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
-            chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
+            chests.get(nbr_tries).setImageResource(R.drawable.heart_b_w);
         } else {
             Toast.makeText(getApplicationContext(), "Du klarade inte att öppna skatten, leta upp en ny!", Toast.LENGTH_SHORT).show();
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
-            chests.get(nbr_tries).setImageResource(R.drawable.little_chest_b_w);
+            chests.get(nbr_tries).setImageResource(R.drawable.heart_b_w);
             finish();
         }
         wrongSound();

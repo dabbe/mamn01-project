@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -53,6 +55,8 @@ public class QuizActivity extends Activity {
 
     private String typeQuestion;
 
+    private PowerManager.WakeLock mWakeLock;
+
     MediaPlayer mp = null;
 
 
@@ -63,7 +67,7 @@ public class QuizActivity extends Activity {
 
         //typeQuestion = getIntent().getExtras().getString("namn");
         // Ska ändras när de andra är implementerat
-        typeQuestion = "geo3";
+        typeQuestion = "math3";
 
         // Assign the buttons
         button1 = (Button) findViewById(R.id.b_ans1);
@@ -135,14 +139,63 @@ public class QuizActivity extends Activity {
                 }
             }
         });
-        createDialog();
+        createDialogStart();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "NoiseAlert");
     }
 
-    private void createDialog() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
+
+    }
+
+    //Onbackkey pressed, comes alert dialog
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //Ask the user if they want to quit
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_menu_info_details)
+                    .setTitle("Vill du avsluta spelet?")
+                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\n Alla dina skatter är sparade, men inte framstegen du gjort hittentills.")
+                    .setPositiveButton("Jag är säker", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            //Stop the activity
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("Nej", null)
+                    .show();
+
+            return true;
+        }else {
+                return super.onKeyDown(keyCode, event);
+            }
+    }
+
+    private void createDialogStart() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_quiz);
         dialog.setCanceledOnTouchOutside(false);
+
         //dialog.setTitle("Dialog Box");
         TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
         Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK);
@@ -254,11 +307,28 @@ public class QuizActivity extends Activity {
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.heart_b_w);
         } else {
-            Toast.makeText(getApplicationContext(), "Du klarade inte att öppna skatten, leta upp en ny!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Du klarade inte att öppna skatten, leta upp en ny!", Toast.LENGTH_SHORT).show();
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.heart_b_w);
-            finish();
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_quiz);
+            dialog.setCanceledOnTouchOutside(false);
+
+            //dialog.setTitle("Dialog Box");
+            TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
+            text.setText("Du svarade fel 3 gånger! \n\n" + "Rätt på senaste frågan är " + correct + "\n\n Du får får leta upp en ny skatt!" );
+            Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK);
+            //image.setImageResource(R.drawable.dialog2_bg);
+            buttonOk.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View View3) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            dialog.show();
+
         }
         wrongSound();
         wrongVibrate();
@@ -266,11 +336,30 @@ public class QuizActivity extends Activity {
 
     //Måste ändras med poängen sedan
     private void correctAnswers() {
-        Toast.makeText(getApplicationContext(), correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), correctAnswerFirst + "100" + correctAnswerLast, Toast.LENGTH_SHORT).show();
         correctVibrate();
         correctSound();
         saveScore(100);
-        finish();
+
+        //Dialog before enter next screen
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_quiz);
+        dialog.setCanceledOnTouchOutside(false);
+
+        //dialog.setTitle("Dialog Box");
+        TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
+        text.setText("Du svarade rätt! \n\n" + correctAnswerFirst + "100" + correctAnswerLast);
+        Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK);
+        //image.setImageResource(R.drawable.dialog2_bg);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        dialog.show();
+
     }
 
     //Not in use, but nice to have

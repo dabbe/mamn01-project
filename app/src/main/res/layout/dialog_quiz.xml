@@ -31,15 +31,21 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Okej, jag förstår!"
-            android:gravity="center_vertical"
+            android:text="OK!"
+
+            android:textAlignment="gravity"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
             android:id="@+id/buttonOK"
             android:paddingBottom="10dp"
-            android:layout_marginBottom="20dp"
+            android:paddingTop="10dp"
+            android:layout_margin="10dp"
             android:layout_below="@+id/descript_quiz"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
 

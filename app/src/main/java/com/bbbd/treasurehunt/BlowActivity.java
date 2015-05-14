@@ -70,7 +70,7 @@ public class BlowActivity extends Activity{
         createDialog();
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "NoiseAlert");
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "NoiseAlert");
     }
     @Override
     public void onResume() {

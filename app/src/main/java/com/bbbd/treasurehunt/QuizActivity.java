@@ -57,7 +57,6 @@ public class QuizActivity extends Activity {
 
     private PowerManager.WakeLock mWakeLock;
 
-    Dialog dialogFinish = null;
 
     MediaPlayer mp = null;
 
@@ -181,7 +180,11 @@ public class QuizActivity extends Activity {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            //startActivity(new Intent(this, QuizActivity.class));
+                            Intent homeScreen = new Intent(QuizActivity.this, StartActivity.class);
+                            //finish();
+                            homeScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(homeScreen);
                             //Stop the activity
                             finish();
                         }
@@ -317,7 +320,7 @@ public class QuizActivity extends Activity {
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.heart_b_w);
-            dialogFinish =  new Dialog(this);
+            final Dialog dialogFinish =  new Dialog(this);
             dialogFinish.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialogFinish.setContentView(R.layout.dialog_quiz);
             dialogFinish.setCanceledOnTouchOutside(false);
@@ -325,7 +328,7 @@ public class QuizActivity extends Activity {
                 @Override
                 public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        Toast.makeText(getApplicationContext(),"Backpressed", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),"Backpressed", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                     return false;
@@ -364,9 +367,19 @@ public class QuizActivity extends Activity {
 
         //dialog.setTitle("Dialog Box");
         TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
-        text.setText("Du svarade rätt! \n\n" + correctAnswerFirst + "100" + correctAnswerLast);
+        text.setText("Du svarade rätt och har nu öppnat skatten! \n\n" + correctAnswerFirst + "100" + correctAnswerLast);
         Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK);
         //image.setImageResource(R.drawable.dialog2_bg);
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    //Toast.makeText(getApplicationContext(),"Backpressed", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
         buttonOk.setOnClickListener(new View.OnClickListener() {
             public void onClick(View View3) {
                 dialog.dismiss();

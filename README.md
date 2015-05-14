@@ -63,5 +63,5 @@ Use case:
 * bättre vibration 
 * Danne: Fixa wakeLock, resume problem efter hittat första skatten, ok-knapp dialogruta, fixa dialogruta, finish ruta, byt till gul bakgrund, 
 * Jacob: ok-knapp dialogruta, finish ruta, öka mängd sand att blåsa, (Christian fixar)
-* Oscar: ok-knapp dialogruta, finish ruta, gula bakgrund startskärm och bild med vägen, 
+* Oscar: ok-knapp dialogruta, finish ruta, gula bakgrund startskärm och bild med vägen, wakelock
 * Christian: ok-knapp dialogruta, finish ruta med ok, onbackpressed()

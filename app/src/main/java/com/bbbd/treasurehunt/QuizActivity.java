@@ -57,6 +57,8 @@ public class QuizActivity extends Activity {
 
     private PowerManager.WakeLock mWakeLock;
 
+    Dialog dialogFinish = null;
+
     MediaPlayer mp = null;
 
 
@@ -165,7 +167,11 @@ public class QuizActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //Handle the back button
+
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+           /* if(dialogFinish.isShowing()){
+                return true;
+            } **/
             //Ask the user if they want to quit
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_info_details)
@@ -311,23 +317,32 @@ public class QuizActivity extends Activity {
             nbr_tries--;
             ((TextView) findViewById(R.id.text_tries_left)).setText(first_half + nbr_tries + second_half);
             chests.get(nbr_tries).setImageResource(R.drawable.heart_b_w);
-            final Dialog dialog = new Dialog(this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.dialog_quiz);
-            dialog.setCanceledOnTouchOutside(false);
-
+            dialogFinish =  new Dialog(this);
+            dialogFinish.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogFinish.setContentView(R.layout.dialog_quiz);
+            dialogFinish.setCanceledOnTouchOutside(false);
+            dialogFinish.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        Toast.makeText(getApplicationContext(),"Backpressed", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    return false;
+                }
+            });
             //dialog.setTitle("Dialog Box");
-            TextView text = (TextView) dialog.findViewById(R.id.descript_quiz);
+            TextView text = (TextView) dialogFinish.findViewById(R.id.descript_quiz);
             text.setText("Du svarade fel 3 gånger! \n\n" + "Rätt på senaste frågan är " + correct + "\n\n Du får får leta upp en ny skatt!" );
-            Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK);
+            Button buttonOk = (Button) dialogFinish.findViewById(R.id.buttonOK);
             //image.setImageResource(R.drawable.dialog2_bg);
             buttonOk.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View View3) {
-                    dialog.dismiss();
+                    dialogFinish.dismiss();
                     finish();
                 }
             });
-            dialog.show();
+            dialogFinish.show();
 
         }
         wrongSound();

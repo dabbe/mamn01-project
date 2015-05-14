@@ -23,7 +23,7 @@
         android:textSize="40dp"
         android:textAlignment="center"
         android:textColor="#000"
-        android:background="#80E8CB56"
+        android:background="#D0E8CB56"
 
         android:layout_height="wrap_content"
         android:id="@+id/textView2" />
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Medium Text"
-        android:background="#80E8CB56"
+        android:background="#D0E8CB56"
         android:layout_marginTop="30dp"
         android:id="@+id/textView3"
         android:layout_below="@+id/textView2"

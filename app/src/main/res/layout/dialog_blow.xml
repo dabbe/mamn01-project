@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:weightSum="1.3">
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3">
-        </LinearLayout>
+    </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#80E8CB56"
+        android:gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_weight="0.7">
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/descript_blow"
+            android:padding="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Sand! Sand! Sand överallt! \n\nBlås i mikrofonen för att få sanden att försvinna!"
+            />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#80E8CB56"
-        android:id="@+id/descript_blow"
-        android:padding="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sand! Sand överallt! \n\nBlås i mikrofonen för att få sanden att försvinna!"
-        />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="OK!"
+            android:textAlignment="gravity"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:id="@+id/button_ok_blow"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:layout_margin="10dp"
+            android:layout_below="@+id/descript_blow"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3">
-    </LinearLayout>
 
 </LinearLayout>

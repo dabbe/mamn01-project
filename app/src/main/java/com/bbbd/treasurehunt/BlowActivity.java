@@ -1,15 +1,19 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.content.Context;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.bbbd.treasurehunt.sound.*;
@@ -34,6 +38,8 @@ public class BlowActivity extends Activity{
     private float progress;
     private ImageView sand;
 
+    private Dialog startDialog = null;
+
     /****************** Define runnable thread again and again detect noise *********/
 
     private Runnable mSleepTask = new Runnable() {
@@ -46,15 +52,17 @@ public class BlowActivity extends Activity{
     private Runnable mPollTask = new Runnable() {
         public void run() {
             double amp = mSensor.getAmplitude();
-            if ((amp > threshold)) progress += amp;
+            if ((amp > threshold) && !startDialog.isShowing()){
+                progress += amp;
+            }
 
             // Runnable(mPollTask) will again execute after POLL_INTERVAL
             mHandler.postDelayed(mPollTask, POLL_INTERVAL);
 
-            if(progress>50){
+            if(progress>150){
                 transitionToNextScene();
             }
-            sand.setAlpha(1-(progress/50));
+            sand.setAlpha(1-(progress/150));
         }
     };
 
@@ -75,6 +83,9 @@ public class BlowActivity extends Activity{
     @Override
     public void onResume() {
         super.onResume();
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+        }
         if (!mRunning) {
             mRunning = true;
             start();
@@ -84,24 +95,52 @@ public class BlowActivity extends Activity{
     @Override
     public void onStop() {
         super.onStop();
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
         //Stop noise monitoring
         stop();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //Ask the user if they want to quit
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_menu_info_details)
+                    .setTitle("Vill du avsluta spelet?")
+                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\n Alla dina skatter är sparade, men inte framstegen du gjort hittentills.")
+                    .setPositiveButton("Jag är säker", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent homeScreen = new Intent(BlowActivity.this, StartActivity.class);
+                            homeScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(homeScreen);
+                            //Stop the activity
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("Nej", null)
+                    .show();
+
+            return true;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 
     private void start() {
         mSensor.start();
-        if (!mWakeLock.isHeld()) {
-            mWakeLock.acquire();
-        }
+
         //Noise monitoring start
         // Runnable(mPollTask) will execute after POLL_INTERVAL
         mHandler.postDelayed(mPollTask, POLL_INTERVAL);
     }
 
     private void stop() {
-        if (mWakeLock.isHeld()) {
-            mWakeLock.release();
-        }
         mHandler.removeCallbacks(mSleepTask);
         mHandler.removeCallbacks(mPollTask);
         mSensor.stop();
@@ -111,9 +150,40 @@ public class BlowActivity extends Activity{
 
     private void transitionToNextScene(){
         stop();
-        startActivity(new Intent(this, QuizActivity.class));
-        finish();
+        finishDialog();
+        //startActivity(new Intent(this, QuizActivity.class));
+        //finish();
     }
+
+    private void finishDialog() {
+        final Dialog dialogFinish =  new Dialog(this);
+        dialogFinish.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogFinish.setContentView(R.layout.dialog_quiz);
+        dialogFinish.setCanceledOnTouchOutside(false);
+        dialogFinish.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    //Toast.makeText(getApplicationContext(),"Backpressed", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        //dialog.setTitle("Dialog Box");
+        TextView text = (TextView) dialogFinish.findViewById(R.id.descript_quiz);
+        text.setText("Du blåste bort sanden, men kistan är låst!" );
+        Button buttonOk = (Button) dialogFinish.findViewById(R.id.buttonOK);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                dialogFinish.dismiss();
+                startActivity(new Intent(BlowActivity.this, QuizActivity.class));
+                finish();
+            }
+        });
+        dialogFinish.show();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -123,16 +193,17 @@ public class BlowActivity extends Activity{
         return true;
     }
     private void createDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_blow);
-        dialog.setCanceledOnTouchOutside(false);
-        TextView text = (TextView) dialog.findViewById(R.id.descript_blow);
-        text.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dialog.dismiss();
+        startDialog = new Dialog(this);
+        startDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        startDialog.setContentView(R.layout.dialog_blow);
+        startDialog.setCanceledOnTouchOutside(false);
+        TextView text = (TextView) startDialog.findViewById(R.id.descript_blow);
+        Button buttonOk = (Button) startDialog.findViewById(R.id.button_ok_blow);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                startDialog.dismiss();
             }
         });
-        dialog.show();
+        startDialog.show();
     }
 }

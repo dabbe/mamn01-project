@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
 
             android:padding="20dp"
-            android:text="Nu måste du klara en fråga innan skatten öppnas, du har 3 försök på dig. \n\nSvarar du fel så får du en ny fråga, men svarar du rätt innan du använt alla dina tre försök så får du 100 poäng!"
+            android:text="Kistan är låst, du måste klara en fråga innan kistan öppnas, du har 3 försök på dig. \n\nSvarar du fel så får du en ny fråga, men svarar du rätt innan du använt alla dina tre försök så får du 100 poäng!"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button

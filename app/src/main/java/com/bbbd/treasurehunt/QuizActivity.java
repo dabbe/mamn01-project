@@ -180,9 +180,7 @@ public class QuizActivity extends Activity {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //startActivity(new Intent(this, QuizActivity.class));
                             Intent homeScreen = new Intent(QuizActivity.this, StartActivity.class);
-                            //finish();
                             homeScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(homeScreen);
                             //Stop the activity

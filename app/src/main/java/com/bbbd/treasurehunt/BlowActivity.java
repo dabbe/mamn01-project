@@ -110,8 +110,8 @@ public class BlowActivity extends Activity{
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_info_details)
                     .setTitle("Vill du avsluta spelet?")
-                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\n Alla dina skatter är sparade, men inte framstegen du gjort hittentills.")
-                    .setPositiveButton("Jag är säker", new DialogInterface.OnClickListener() {
+                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\nAlla dina skatter är sparade, men inte den nuvarande")
+                    .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

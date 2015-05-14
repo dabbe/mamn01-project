@@ -27,7 +27,7 @@
             android:id="@+id/descript_dig"
             android:padding="20dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Du har nu hittat skatten men den ligger gömd under jord, du måste därför gräva upp skatten. \n\nGör en grävrörelse med telefonen för att gräva upp skatten."
+            android:text="Grattis! \n\nDu har nu lyckats att gräva upp skatten men det finns sand i vägen!"
             />
 
         <Button

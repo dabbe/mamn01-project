@@ -1,19 +1,22 @@
 package com.bbbd.treasurehunt;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
-import android.view.MotionEvent;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -22,22 +25,20 @@ import android.widget.TextView;
  */
 public class DigActivity extends Activity implements SensorEventListener {
 
-    Float azimut, pitch, roll;  // View to draw a compass
-    //TextView x, y, z;
-    CheckBox digg1, digg2, digg3;
-    boolean firstDigg, secondDigg, down, down2, down3;
+    private Float azimut, pitch, roll;  // View to draw a compass
+    private CheckBox digg1, digg2, digg3;
+    private boolean firstDigg, secondDigg, down, down2, down3, showFinishDiag;
 
     private SensorManager mSensorManager;
-    Sensor accelerometer;
-    Sensor magnetometer;
+    private Sensor accelerometer;
+    private Sensor magnetometer;
+    private Dialog startDialog = null;
+    private PowerManager.WakeLock mWakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dig);
-//        x = (TextView) findViewById(R.id.x);
-//        y = (TextView) findViewById(R.id.y);
-//        z = (TextView) findViewById(R.id.z);
         digg1 = (CheckBox) findViewById(R.id.Digg1);
         digg2 = (CheckBox) findViewById(R.id.Digg2);
         digg3 = (CheckBox) findViewById(R.id.Digg3);
@@ -46,27 +47,34 @@ public class DigActivity extends Activity implements SensorEventListener {
         down = false;
         down2 = false;
         down3 = false;
+        showFinishDiag = true;
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "NoiseAlert");
 
         createDialog();
 
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
-            startActivity(new Intent(this, BlowActivity.class));
-        finish();
-        return true;
+    public void onStop() {
+        super.onStop();
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
     }
 
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
         mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+        }
     }
 
     protected void onPause() {
@@ -74,35 +82,79 @@ public class DigActivity extends Activity implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
+
     private void createDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_dig);
-        dialog.setCanceledOnTouchOutside(false);
-        //dialog.setTitle("Dialog Box");
-        TextView text = (TextView) dialog.findViewById(R.id.descript_dig);
-        //image.setImageResource(R.drawable.dialog2_bg);
-        text.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                dialog.dismiss();
+        startDialog = new Dialog(this);
+        startDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        startDialog.setContentView(R.layout.dialog_dig);
+        startDialog.setCanceledOnTouchOutside(false);
+        TextView text = (TextView) startDialog.findViewById(R.id.descript_dig);
+        Button buttonOk = (Button) startDialog.findViewById(R.id.button_ok_dig);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                startDialog.dismiss();
             }
         });
-        dialog.show();
+        startDialog.show();
     }
 
-//If the Hint only should be shown the first time the game is started
-/*    private boolean isFirstTime()
-    {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        boolean ranBefore = preferences.getBoolean("RanBefore", false);
-        if (!ranBefore) {
-            // first time
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("RanBefore", true);
-            editor.apply();
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //Ask the user if they want to quit
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_menu_info_details)
+                    .setTitle("Vill du avsluta spelet?")
+                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\nAlla dina skatter är sparade, men inte den nuvarande")
+                    .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent homeScreen = new Intent(DigActivity.this, StartActivity.class);
+                            homeScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(homeScreen);
+                            //Stop the activity
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("Nej", null)
+                    .show();
+
+            return true;
+        }else {
+            return super.onKeyDown(keyCode, event);
         }
-        return !ranBefore;
-    }*/
+    }
+
+    private void finishDialog() {
+        showFinishDiag = false;
+        final Dialog dialogFinish =  new Dialog(this);
+        dialogFinish.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogFinish.setContentView(R.layout.dialog_dig_finish);
+        dialogFinish.setCanceledOnTouchOutside(false);
+        dialogFinish.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    //Toast.makeText(getApplicationContext(),"Backpressed", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        Button buttonOk = (Button) dialogFinish.findViewById(R.id.button_ok_dig);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                dialogFinish.dismiss();
+                startActivity(new Intent(DigActivity.this, BlowActivity.class));
+                finish();
+            }
+        });
+        dialogFinish.show();
+    }
 
     private void digVibrate() {
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -116,6 +168,9 @@ public class DigActivity extends Activity implements SensorEventListener {
     float[] mGeomagnetic;
 
     public void onSensorChanged(SensorEvent event) {
+        if(digg3.isChecked() && showFinishDiag){
+            finishDialog();
+        }
         double y_axis;
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
             mGravity = event.values;
@@ -125,16 +180,13 @@ public class DigActivity extends Activity implements SensorEventListener {
             float R[] = new float[9];
             float I[] = new float[9];
             boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic);
-            if (success) {
+            if (success && !startDialog.isShowing()) {
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
                 azimut = orientation[0]; // orientation contains: azimut, pitch and roll
                 pitch = orientation[1];
                 roll = orientation[2];
                 y_axis = Math.toDegrees(pitch);
-//                x.setText("X: " + Double.toString(Math.toDegrees(azimut)));
-//                y.setText("Y: " + y_axis);
-//                z.setText("Z: " + Double.toString(Math.toDegrees(roll)));
                 if (y_axis > 30 && y_axis < 50 && !firstDigg) {
                     if (!down) {
                         digVibrate();

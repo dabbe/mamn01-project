@@ -65,8 +65,8 @@ public class StartActivity extends Activity {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_info_details)
                     .setTitle("Vill du stänga av spelet?")
-                    .setMessage("Är du säker på att du vill stänga av spelet? \n\n Alla dina skatter är sparade, och finns kvar här nsäta gång du vill leta efter fler")
-                    .setPositiveButton("Jag är säker", new DialogInterface.OnClickListener() {
+                    .setMessage("Är du säker på att du vill stänga av spelet? \n\nAlla dina skatter är sparade")
+                    .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

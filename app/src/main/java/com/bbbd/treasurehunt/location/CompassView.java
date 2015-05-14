@@ -81,8 +81,12 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        System.out.println("Created");
         initGraphical();
+        startThread();
+    }
 
+    public void startThread(){
         thread = new DrawingThread(this);
         thread.setRunning(true);
         thread.start();
@@ -101,7 +105,6 @@ public class CompassView extends SurfaceView implements SurfaceHolder.Callback {
             try {
                 thread.join();
                 retry = false;
-                compass.stop();
             } catch (InterruptedException e) {
             }
         }

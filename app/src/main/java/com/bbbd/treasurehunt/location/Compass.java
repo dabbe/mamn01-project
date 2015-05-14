@@ -22,8 +22,7 @@ public class Compass implements SensorEventListener {
         sensorManager = (SensorManager) c.getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
+        start();
     }
 
 
@@ -33,6 +32,11 @@ public class Compass implements SensorEventListener {
 
     public void stop() {
         sensorManager.unregisterListener(this);
+    }
+
+    public void start() {
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     /* Taken from: http://blog.thomnichols.org/2011/08/smoothing-sensor-data-with-a-low-pass-filter

@@ -57,6 +57,7 @@ public class CompassActivity extends Activity implements
     private LocationRequest mLocationRequest;
     private Location lastLocation;
     private Location targetLocation;
+    private CompassView compassView;
     private VibrationThread t;
 
     private PowerManager.WakeLock mWakeLock;
@@ -79,6 +80,22 @@ public class CompassActivity extends Activity implements
         initialize();
     }
 
+
+    private void initializeGUI() {
+        targetLocation = new Location("");
+        targetLocation.setLatitude(lat);
+        targetLocation.setLongitude(lon);
+        compass = new Compass(this, targetLocation);
+        compassView = new CompassView(this, compass);
+        compassView.setOnClickListener(this);
+        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setCancelable(false);
+        loadingDialog.setMessage("Laddar..");
+        loadingDialog.show();
+        createDialog();
+    }
+
     private void initialize() {
         loadTreasures();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -91,23 +108,6 @@ public class CompassActivity extends Activity implements
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "NoiseAlert");
     }
-
-    private void initializeGUI() {
-        targetLocation = new Location("");
-        targetLocation.setLatitude(lat);
-        targetLocation.setLongitude(lon);
-        compass = new Compass(this, targetLocation);
-        CompassView compassView = new CompassView(this, compass);
-        compassView.setOnClickListener(this);
-        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
-        loadingDialog = new ProgressDialog(this);
-        loadingDialog.setCancelable(false);
-        loadingDialog.setMessage("Laddar..");
-        loadingDialog.show();
-        createDialog();
-
-    }
-
 
     private void createDialog() {
         final Dialog dialog = new Dialog(this);
@@ -289,6 +289,7 @@ public class CompassActivity extends Activity implements
         }
         t = new VibrationThread(this);
         t.start();
+
         navigateToNextTreasure();
     }
 

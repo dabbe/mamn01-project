@@ -11,6 +11,15 @@ public class Treasure {
     private String type;
     private String desc_text;
     private int points;
+    private boolean found = false;
+
+    public boolean isFound(){
+        return found;
+    }
+
+    public void setFound(){
+        found = true;
+    }
 
     public Location getLocation(){
         Location location = new Location("");

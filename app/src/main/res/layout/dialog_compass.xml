@@ -5,31 +5,47 @@
     android:orientation="vertical"
     android:weightSum="1.3">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"></LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7">
+        android:layout_gravity="center"
+        android:layout_weight="0.7"
+        android:background="#80E8CB56"
+        android:gravity="center_vertical">
+
 
         <TextView
             android:id="@+id/descript_compass"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#80E8CB56"
+            android:layout_height="wrap_content"
+
             android:padding="20dp"
             android:text="Följ pilen för att hitta skatten. Pilen blir grönare och grönare och det vibrerar mer och mer ju närmre du kommer. Ut med dig och jaga rätt på skatterna!"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <Button
+            android:id="@+id/buttonOK_compass"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
 
-    </LinearLayout>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/descript_compass"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="OK!"
+            android:textAlignment="gravity" />
+    </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"></LinearLayout>
 
 </LinearLayout>

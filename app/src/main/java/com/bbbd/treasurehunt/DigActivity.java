@@ -107,7 +107,7 @@ public class DigActivity extends Activity implements SensorEventListener {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_info_details)
                     .setTitle("Vill du avsluta spelet?")
-                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\nAlla dina skatter är sparade, men inte den nuvarande")
+                    .setMessage("\u00C4r du s\u00E4ker p\u00E5 att du vill avsluta nuvarande spel? \n\nAlla dina skatter \u00E4r sparade, men inte den nuvarande")
                     .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
 
                         @Override

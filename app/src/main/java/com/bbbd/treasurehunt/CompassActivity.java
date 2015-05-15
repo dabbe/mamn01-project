@@ -7,16 +7,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,16 +57,19 @@ public class CompassActivity extends Activity implements
     private LocationRequest mLocationRequest;
     private Location lastLocation;
     private Location targetLocation;
+    private CompassView compassView;
     private VibrationThread t;
+
+    private PowerManager.WakeLock mWakeLock;
 
     private ArrayList<Treasure> treasures;
     private Random rnd;
 
     private long distanceFactor = 1000;
-    private int distanceColor = 0xFFFF0000;
+    private int distanceColor = 0x990000;
 
     private int closeColor = 0x00FF00;
-    private int farColor = 0x0B2403;
+    private int farColor = 0x990000;
 
 
     @Override
@@ -76,6 +80,22 @@ public class CompassActivity extends Activity implements
         initialize();
     }
 
+
+    private void initializeGUI() {
+        targetLocation = new Location("");
+        targetLocation.setLatitude(lat);
+        targetLocation.setLongitude(lon);
+        compass = new Compass(this, targetLocation);
+        compassView = new CompassView(this, compass);
+        compassView.setOnClickListener(this);
+        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setCancelable(false);
+        loadingDialog.setMessage("Laddar..");
+        loadingDialog.show();
+        createDialog();
+    }
+
     private void initialize() {
         loadTreasures();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -84,42 +104,27 @@ public class CompassActivity extends Activity implements
                 .addOnConnectionFailedListener(this)
                 .build();
         rnd = new Random();
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "NoiseAlert");
     }
-
-    private void initializeGUI() {
-        targetLocation = new Location("");
-        targetLocation.setLatitude(lat);
-        targetLocation.setLongitude(lon);
-        compass = new Compass(this, targetLocation);
-        CompassView compassView = new CompassView(this, compass);
-        compassView.setOnClickListener(this);
-        ((LinearLayout) findViewById(R.id.layout)).addView(compassView);
-        loadingDialog = new ProgressDialog(this);
-        loadingDialog.setCancelable(false);
-        loadingDialog.setMessage("Laddar..");
-        loadingDialog.show();
-        createDialog();
-
-    }
-
 
     private void createDialog() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean b = prefs.getBoolean("first", true);
-        if (b) {
-            final Dialog dialog = new Dialog(this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.dialog_compass);
-            dialog.setCanceledOnTouchOutside(false);
-            TextView text = (TextView) dialog.findViewById(R.id.descript_compass);
-            text.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View View3) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-            prefs.edit().putBoolean("first", false).apply();
-        }
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_compass);
+        dialog.setCanceledOnTouchOutside(false);
+
+        //dialog.setTitle("Dialog Box");
+        TextView text = (TextView) dialog.findViewById(R.id.descript_compass);
+        Button buttonOk = (Button) dialog.findViewById(R.id.buttonOK_compass);
+        //image.setImageResource(R.drawable.dialog2_bg);
+        buttonOk.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View View3) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
 
@@ -223,25 +228,68 @@ public class CompassActivity extends Activity implements
 
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(this, DigActivity.class));
+       // startActivity(new Intent(this, DigActivity.class));
     }
 
     @Override
     protected void onPause() {
-        mGoogleApiClient.disconnect();
         super.onPause();
+        mGoogleApiClient.disconnect();
+
+        if (mWakeLock.isHeld()) {
+            mWakeLock.release();
+        }
         if (t != null) t.setInterrupted(true);
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //Handle the back button
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+           /* if(dialogFinish.isShowing()){
+                return true;
+            } **/
+            //Ask the user if they want to quit
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_menu_info_details)
+                    .setTitle("Vill du avsluta spelet?")
+                    .setMessage("Är du säker på att du vill avsluta nuvarande spel? \n\n Alla dina skatter är sparade, men inte framstegen du gjort hittills.")
+                    .setPositiveButton("Jag är säker", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent homeScreen = new Intent(CompassActivity.this, StartActivity.class);
+                            homeScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(homeScreen);
+                            //Stop the activity
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("Nej", null)
+                    .show();
+
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (!mWakeLock.isHeld()) {
+            mWakeLock.acquire();
+        }
+
         mGoogleApiClient.connect();
         if (t != null) {
             t.setInterrupted(true);
         }
         t = new VibrationThread(this);
         t.start();
+
         navigateToNextTreasure();
     }
 

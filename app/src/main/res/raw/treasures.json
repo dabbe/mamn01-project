@@ -1,23 +1,30 @@
 [
   {
-	"lat": 55.715003,
-	"lon": 13.211233,
+	"lat": 55.714725,
+	"lon": 13.212145,
 	"type": "diamond",
 	"desc_text": "Denna diamant ägdes en gång i tiden av en hemsk pirat",
 	"points": 10
   },
   {
-	"lat": 55.714320,
-	"lon": 13.212102,
+	"lat": 55.713694,
+	"lon": 13.211802,
 	"type": "ruby",
 	"desc_text": "Ute till havs är rubiner mycket värda",
 	"points": 3
   },
   {
-	"lat": 55.715420,
-	"lon": 13.212360,
+	"lat": 55.714477,
+	"lon": 13.211534,
 	"type": "silver",
 	"desc_text": "Påsen innehåller ett par silvermynt",
 	"points": 10
+  },
+  {
+  	"lat": 55.714906,
+  	"lon": 13.211593,
+  	"type": "silver",
+  	"desc_text": "Påsen innehåller ett par silvermynt",
+  	"points": 10
   }
 ]

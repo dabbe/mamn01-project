@@ -228,7 +228,7 @@ public class CompassActivity extends Activity implements
 
     @Override
     public void onClick(View v) {
-       // startActivity(new Intent(this, DigActivity.class));
+      //startActivity(new Intent(this, DigActivity.class));
     }
 
     @Override

@@ -33,5 +33,12 @@
 	"type": "silver",
 	"desc_text": "Påsen innehåller ett par silvermynt",
 	"points": 10
+  },
+  {
+  	"lat": 55.714906,
+  	"lon": 13.211593,
+  	"type": "silver",
+  	"desc_text": "Påsen innehåller ett par silvermynt",
+  	"points": 10
   }
 ]
